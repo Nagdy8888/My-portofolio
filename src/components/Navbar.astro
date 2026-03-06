@@ -1,0 +1,44 @@
+---
+---
+
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[--color-border] shadow-sm">
+  <div class="max-w-[1100px] mx-auto px-6 flex justify-between items-center h-16">
+    <a href="/" class="font-semibold text-lg text-[--color-primary]">Mustafa Alnagdy</a>
+    <ul class="hidden md:flex gap-8">
+      <li><a href="/#about" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">About</a></li>
+      <li><a href="/#experience" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Experience</a></li>
+      <li><a href="/#projects" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Projects</a></li>
+      <li><a href="/#skills" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Skills</a></li>
+      <li><a href="/#education" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Education</a></li>
+      <li><a href="/#contact" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Contact</a></li>
+    </ul>
+    <button id="menu-toggle" type="button" class="md:hidden p-2 text-[--color-text] hover:text-[--color-primary] transition-colors" aria-label="Toggle menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" x2="20" y1="12" y2="12" />
+        <line x1="4" x2="20" y1="6" y2="6" />
+        <line x1="4" x2="20" y1="18" y2="18" />
+      </svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden flex flex-col md:hidden bg-white border-t border-[--color-border]">
+    <a href="/#about" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">About</a>
+    <a href="/#experience" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Experience</a>
+    <a href="/#projects" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Projects</a>
+    <a href="/#skills" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Skills</a>
+    <a href="/#education" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Education</a>
+    <a href="/#contact" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Contact</a>
+  </div>
+</nav>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+  document.querySelectorAll('#mobile-menu a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu?.classList.add('hidden');
+    });
+  });
+</script>

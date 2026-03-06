@@ -1,0 +1,26 @@
+---
+const skillGroups = [
+  { name: 'Programming', skills: ['Python', 'HTML/CSS'] },
+  { name: 'Data Science & ML', skills: ['Pandas', 'NumPy', 'Scikit-learn', 'Matplotlib', 'Seaborn', 'Regression', 'Classification', 'Clustering', 'Feature Engineering', 'Statistical Analysis'] },
+  { name: 'Process Engineering', skills: ['Aspen HYSYS', 'PFD', 'P&ID', 'Process Safety'] },
+  { name: 'Tools', skills: ['n8n Automation', 'Microsoft Office', 'Jupyter Notebook', 'AutoCAD'] },
+  { name: 'Soft Skills', skills: ['Analytical Thinking', 'Problem-Solving', 'Communication', 'Team Collaboration'] },
+];
+---
+
+<section id="skills" class="py-16 md:py-20 bg-[--color-bg] animate-on-scroll">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-[--color-text] mb-2">Skills</h2>
+    <div class="section-underline mb-8"></div>
+    {skillGroups.map((group) => (
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold text-[--color-text] uppercase tracking-wider mb-3">{group.name}</h3>
+        <div class="flex flex-wrap gap-2">
+          {group.skills.map((skill) => (
+            <span class="text-sm bg-[#dbeafe] text-[--color-primary] px-3 py-1.5 rounded-md border border-[--color-border]">{skill}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

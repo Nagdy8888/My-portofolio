@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import { projects, categoryToBadgeClass } from '../../data/projects';
+
+const categories = Array.from(new Set(projects.map((p) => p.category))).sort();
+---
+
+<Layout title="Projects | Mustafa Alnagdy" description="Portfolio projects - ML, data science, and process engineering.">
+  <Navbar />
+  <main class="py-16 md:py-20 bg-[--color-bg]">
+    <div class="max-w-[1100px] mx-auto px-6">
+      <a href="/" class="text-sm text-[--color-primary] hover:underline mb-6 inline-block">&larr; Back to Home</a>
+      <h1 class="text-3xl md:text-4xl font-bold text-[--color-text] mb-2">All Projects</h1>
+      <div class="section-underline mb-6"></div>
+
+      <div id="filter-tabs" class="flex flex-wrap gap-2 mb-8">
+        <button type="button" class="project-filter-tab px-4 py-2 rounded-md text-sm font-medium bg-[--color-primary] text-white" data-filter="all">
+          All
+        </button>
+        {categories.map((cat) => (
+          <button type="button" class="project-filter-tab px-4 py-2 rounded-md text-sm font-medium border-2 border-[--color-primary] text-[--color-primary] hover:bg-[--color-primary] hover:text-white transition-colors" data-filter={cat}>
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {projects.map((project) => (
+          <a href={`/projects/${project.slug}`} class="block group project-card" data-category={project.category}>
+            <div class="bg-white rounded-md p-6 border border-[--color-border] shadow-md group-hover:shadow-lg transition-shadow h-full">
+              <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-3 ${categoryToBadgeClass(project.category)}`}>{project.category}</span>
+              <h3 class="font-semibold text-lg text-[--color-text] mb-2">{project.title}</h3>
+              <p class="text-sm text-[--color-text-light] mb-2">{project.shortDescription}</p>
+              {project.keyResult && <p class="text-sm font-semibold text-[--color-primary] mb-4">{project.keyResult}</p>}
+              <div class="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span class="text-xs font-medium bg-[#dbeafe] text-[--color-primary] px-3 py-1 rounded-full">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const tabs = document.querySelectorAll('.project-filter-tab');
+  const cards = document.querySelectorAll('.project-card');
+
+  function setActiveTab(active: Element) {
+    tabs.forEach((tab) => {
+      tab.classList.remove('bg-[--color-primary]', 'text-white');
+      tab.classList.add('border-2', 'border-[--color-primary]', 'text-[--color-primary]');
+    });
+    active.classList.remove('border-2', 'border-[--color-primary]', 'text-[--color-primary]');
+    active.classList.add('bg-[--color-primary]', 'text-white');
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const filter = tab.getAttribute('data-filter');
+      setActiveTab(tab);
+      cards.forEach((card) => {
+        const category = card.getAttribute('data-category');
+        const show = filter === 'all' || category === filter;
+        (card as HTMLElement).classList.toggle('hidden', !show);
+      });
+    });
+  });
+</script>

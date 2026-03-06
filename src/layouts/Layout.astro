@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'Mustafa Alnagdy | Data Scientist & Process Engineer', description = 'Portfolio of Mustafa Alnagdy - Aspiring Data Scientist and Petrochemical Process Systems Engineering student. Python, ML, data analytics, process modeling.' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/My photo.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="font-sans bg-[--color-bg] text-[--color-text] antialiased">
+    <slot />
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+      document.addEventListener('DOMContentLoaded', function () {
+        const observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('animate-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        document.querySelectorAll('.animate-on-scroll').forEach(function (el) {
+          observer.observe(el);
+        });
+      });
+    </script>
+  </body>
+</html>

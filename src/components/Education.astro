@@ -1,0 +1,33 @@
+---
+const certifications = [
+  { name: 'Data Science Professional Certificate', org: 'DataCamp', date: 'In Progress' },
+  { name: 'Circular Economy', org: 'Cairo University', date: 'Feb 2024' },
+  { name: 'Process Safety', org: 'ENPPI', date: 'Sep 2023' },
+  { name: 'Web Development', org: 'Udacity', date: 'Sep 2022' },
+];
+---
+
+<section id="education" class="py-16 md:py-20 bg-[--color-bg-alt] animate-on-scroll">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-[--color-text] mb-2">Education & Certifications</h2>
+    <div class="section-underline mb-8"></div>
+    <div class="flex gap-4 items-start mb-8">
+      <img src="/images/cairo_university_logo.jpeg" alt="Cairo University logo" class="w-12 h-12 object-contain flex-shrink-0 rounded" />
+      <div>
+        <h3 class="font-semibold text-[--color-text]">B.Sc. Petrochemical Processing Systems Engineering</h3>
+        <p class="text-sm text-[--color-primary] font-medium">Cairo University - Faculty of Engineering (CHS)</p>
+        <p class="text-xs text-[--color-text-light]">2021 - Jun 2026 | GPA: 3.63</p>
+      </div>
+    </div>
+    <h3 class="text-lg font-semibold text-[--color-text] mb-4">Certifications & Workshops</h3>
+    {certifications.map((c) => (
+      <div class="flex justify-between items-center py-3 border-b border-[--color-border]">
+        <div>
+          <p class="font-medium text-sm text-[--color-text]">{c.name}</p>
+          <p class="text-xs text-[--color-text-light]">{c.org}</p>
+        </div>
+        <span class="text-xs text-[--color-text-light]">{c.date}</span>
+      </div>
+    ))}
+  </div>
+</section>
