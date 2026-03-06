@@ -22,11 +22,15 @@ const hasStructuredContent = project.problem || project.approach || project.resu
     <div class="max-w-[800px] mx-auto px-6">
       <a href="/projects" class="text-sm text-[--color-primary] hover:underline mb-6 inline-block">&larr; Back to All Projects</a>
 
-      <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-4 ${categoryToBadgeClass(project.category)}`}>{project.category}</span>
+      <div class="flex flex-wrap gap-1.5 mb-4">
+        {project.categories.map((cat) => (
+          <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${categoryToBadgeClass(cat)}`}>{cat}</span>
+        ))}
+      </div>
       <h1 class="text-3xl md:text-4xl font-bold text-[--color-text] mb-4">{project.title}</h1>
       <div class="flex flex-wrap gap-2 mb-6">
         {project.tags.map((tag) => (
-          <span class="text-xs font-medium bg-[#dbeafe] text-[--color-primary] px-3 py-1 rounded-full">{tag}</span>
+          <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
         ))}
       </div>
 

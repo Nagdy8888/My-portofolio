@@ -1,9 +1,18 @@
 ---
 ---
 
-<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[--color-border] shadow-sm">
+<nav class="sticky top-0 z-50 bg-[--color-surface]/90 backdrop-blur-md border-b border-[--color-border] shadow-sm">
   <div class="max-w-[1100px] mx-auto px-6 flex justify-between items-center h-16">
     <a href="/" class="font-semibold text-lg text-[--color-primary]">Mustafa Alnagdy</a>
+    <div class="flex items-center gap-4">
+      <button type="button" id="theme-toggle" class="p-2 rounded-md text-[--color-text-light] hover:text-[--color-primary] hover:bg-[--color-border]/30 transition-colors" aria-label="Toggle dark mode">
+        <span class="theme-icon-dark" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+        <span class="theme-icon-light hidden" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </span>
+      </button>
     <ul class="hidden md:flex gap-8">
       <li><a href="/#about" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">About</a></li>
       <li><a href="/#experience" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Experience</a></li>
@@ -12,6 +21,7 @@
       <li><a href="/#education" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Education</a></li>
       <li><a href="/#contact" class="text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] transition-colors">Contact</a></li>
     </ul>
+    </div>
     <button id="menu-toggle" type="button" class="md:hidden p-2 text-[--color-text] hover:text-[--color-primary] transition-colors" aria-label="Toggle menu">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="4" x2="20" y1="12" y2="12" />
@@ -20,7 +30,7 @@
       </svg>
     </button>
   </div>
-  <div id="mobile-menu" class="hidden flex flex-col md:hidden bg-white border-t border-[--color-border]">
+  <div id="mobile-menu" class="hidden flex flex-col md:hidden bg-[--color-surface] border-t border-[--color-border]">
     <a href="/#about" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">About</a>
     <a href="/#experience" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Experience</a>
     <a href="/#projects" class="block py-3 px-6 text-sm font-medium text-[--color-text-light] hover:text-[--color-primary] border-b border-[--color-border]">Projects</a>

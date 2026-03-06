@@ -1,8 +1,10 @@
 @import "tailwindcss";
 @source "../**/*.{astro,ts}";
 
+/* Dark mode: when .dark is on html, apply dark theme */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  /* Option B - Gradient Hero + Elevated Light */
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
   --color-text: #0f172a;
@@ -10,7 +12,35 @@
   --color-bg: #ffffff;
   --color-bg-alt: #f1f5f9;
   --color-border: #e2e8f0;
+  --color-surface: #ffffff;
   --font-family-sans: 'Inter', sans-serif;
+}
+
+@layer theme {
+  :root, :host {
+    @variant dark {
+      --color-primary: #60a5fa;
+      --color-primary-hover: #93c5fd;
+      --color-text: #f1f5f9;
+      --color-text-light: #94a3b8;
+      --color-bg: #0f172a;
+      --color-bg-alt: #1e293b;
+      --color-border: #334155;
+      --color-surface: #1e293b;
+    }
+  }
+}
+
+/* Ensure dark theme applies when .dark is on html (fallback for Tailwind cascade) */
+html.dark {
+  --color-primary: #60a5fa;
+  --color-primary-hover: #93c5fd;
+  --color-text: #f1f5f9;
+  --color-text-light: #94a3b8;
+  --color-bg: #0f172a;
+  --color-bg-alt: #1e293b;
+  --color-border: #334155;
+  --color-surface: #1e293b;
 }
 
 html {
@@ -58,3 +88,15 @@ html {
 .badge-process { background: #fef3c7; color: #b45309; }
 .badge-automation { background: #f3e8ff; color: #7c3aed; }
 .badge-ai-agent { background: #e0f2fe; color: #0369a1; }
+.badge-n8n { background: #ffedd5; color: #c2410c; }
+
+html.dark .badge-ml { background: #1e3a8a; color: #93c5fd; }
+html.dark .badge-data { background: #14532d; color: #86efac; }
+html.dark .badge-process { background: #78350f; color: #fcd34d; }
+html.dark .badge-automation { background: #4c1d95; color: #c4b5fd; }
+html.dark .badge-ai-agent { background: #0c4a6e; color: #7dd3fc; }
+html.dark .badge-n8n { background: #9a3412; color: #fdba74; }
+
+/* Tag/skill pills (light blue in light mode) */
+.tag-pill { background: #dbeafe; color: var(--color-primary); }
+html.dark .tag-pill { background: rgba(30, 58, 138, 0.4); color: #93c5fd; }

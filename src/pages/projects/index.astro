@@ -4,7 +4,7 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import { projects, categoryToBadgeClass } from '../../data/projects';
 
-const categories = Array.from(new Set(projects.map((p) => p.category))).sort();
+const categories = Array.from(new Set(projects.flatMap((p) => p.categories))).sort();
 ---
 
 <Layout title="Projects | Mustafa Alnagdy" description="Portfolio projects - ML, data science, and process engineering.">
@@ -28,15 +28,19 @@ const categories = Array.from(new Set(projects.map((p) => p.category))).sort();
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((project) => (
-          <a href={`/projects/${project.slug}`} class="block group project-card" data-category={project.category}>
-            <div class="bg-white rounded-md p-6 border border-[--color-border] shadow-md group-hover:shadow-lg transition-shadow h-full">
-              <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-3 ${categoryToBadgeClass(project.category)}`}>{project.category}</span>
+          <a href={`/projects/${project.slug}`} class="block group project-card" data-categories={project.categories.join(",")}>
+            <div class="bg-[--color-surface] rounded-md p-6 border border-[--color-border] shadow-md group-hover:shadow-lg transition-shadow h-full">
+              <div class="flex flex-wrap gap-1.5 mb-3">
+                {project.categories.map((cat) => (
+                  <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${categoryToBadgeClass(cat)}`}>{cat}</span>
+                ))}
+              </div>
               <h3 class="font-semibold text-lg text-[--color-text] mb-2">{project.title}</h3>
               <p class="text-sm text-[--color-text-light] mb-2">{project.shortDescription}</p>
               {project.keyResult && <p class="text-sm font-semibold text-[--color-primary] mb-4">{project.keyResult}</p>}
               <div class="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
-                  <span class="text-xs font-medium bg-[#dbeafe] text-[--color-primary] px-3 py-1 rounded-full">{tag}</span>
+                  <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
                 ))}
               </div>
             </div>
@@ -66,8 +70,9 @@ const categories = Array.from(new Set(projects.map((p) => p.category))).sort();
       const filter = tab.getAttribute('data-filter');
       setActiveTab(tab);
       cards.forEach((card) => {
-        const category = card.getAttribute('data-category');
-        const show = filter === 'all' || category === filter;
+        const categoriesStr = card.getAttribute('data-categories') ?? '';
+        const cardCats = categoriesStr ? categoriesStr.split(',') : [];
+        const show = filter === 'all' || cardCats.includes(filter);
         (card as HTMLElement).classList.toggle('hidden', !show);
       });
     });

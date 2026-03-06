@@ -23,13 +23,39 @@ const { title = 'Mustafa Alnagdy | Data Scientist & Process Engineer', descripti
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      (function() {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var useDark = stored === 'dark' || (stored !== 'light' && prefersDark);
+          document.documentElement.classList.toggle('dark', useDark);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="font-sans bg-[--color-bg] text-[--color-text] antialiased">
     <slot />
     <script is:inline>
       document.documentElement.classList.remove('no-js');
       document.addEventListener('DOMContentLoaded', function () {
-        const observer = new IntersectionObserver(
+        var themeBtn = document.getElementById('theme-toggle');
+        if (themeBtn) {
+          themeBtn.addEventListener('click', function () {
+            var isDark = document.documentElement.classList.toggle('dark');
+            try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+            var darkIcon = document.querySelector('.theme-icon-dark');
+            var lightIcon = document.querySelector('.theme-icon-light');
+            if (darkIcon) darkIcon.classList.toggle('hidden', isDark);
+            if (lightIcon) lightIcon.classList.toggle('hidden', !isDark);
+          });
+          var isDark = document.documentElement.classList.contains('dark');
+          var darkIcon = document.querySelector('.theme-icon-dark');
+          var lightIcon = document.querySelector('.theme-icon-light');
+          if (darkIcon) darkIcon.classList.toggle('hidden', isDark);
+          if (lightIcon) lightIcon.classList.toggle('hidden', !isDark);
+        }
+        var observer = new IntersectionObserver(
           function (entries) {
             entries.forEach(function (entry) {
               if (entry.isIntersecting) {
