@@ -3,22 +3,22 @@ import { projects, categoryToBadgeClass } from '../data/projects';
 const featured = projects.filter((p) => p.featured).slice(0, 6);
 ---
 
-<section id="projects" class="py-16 md:py-20 bg-[--color-bg-alt] animate-on-scroll">
+<section id="projects" class="py-16 md:py-20 bg-[var(--color-bg-alt)] animate-on-scroll">
   <div class="max-w-[1100px] mx-auto px-6">
-    <h2 class="text-2xl md:text-3xl font-bold text-[--color-text] mb-2">Featured Projects</h2>
+    <h2 class="text-2xl md:text-3xl font-bold text-[var(--color-text)] mb-2">Featured Projects</h2>
     <div class="section-underline mb-8"></div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       {featured.map((project) => (
         <a href={`/projects/${project.slug}`} class="block group">
-          <div class="bg-[--color-surface] rounded-md p-6 border border-[--color-border] shadow-md group-hover:shadow-lg transition-shadow h-full">
+          <div class="bg-[var(--color-surface)] rounded-md p-6 border border-[var(--color-border)] shadow-md group-hover:shadow-lg transition-shadow h-full">
             <div class="flex flex-wrap gap-1.5 mb-3">
               {project.categories.map((cat) => (
                 <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${categoryToBadgeClass(cat)}`}>{cat}</span>
               ))}
             </div>
-            <h3 class="font-semibold text-lg text-[--color-text] mb-2">{project.title}</h3>
-            <p class="text-sm text-[--color-text-light] mb-2">{project.shortDescription}</p>
-            {project.keyResult && <p class="text-sm font-semibold text-[--color-primary] mb-4">{project.keyResult}</p>}
+            <h3 class="font-semibold text-lg text-[var(--color-text)] mb-2">{project.title}</h3>
+            <p class="text-sm text-[var(--color-text-light)] mb-2">{project.shortDescription}</p>
+            {project.keyResult && <p class="text-sm font-semibold text-[var(--color-primary)] mb-4">{project.keyResult}</p>}
             <div class="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
                 <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
@@ -29,7 +29,7 @@ const featured = projects.filter((p) => p.featured).slice(0, 6);
       ))}
     </div>
     <div class="text-center">
-      <a href="/projects" class="inline-block border-2 border-[--color-primary] text-[--color-primary] px-6 py-3 rounded-md font-medium hover:bg-[--color-primary] hover:text-white transition-colors">
+      <a href="/projects" class="inline-block border-2 border-[var(--color-primary)] text-[var(--color-primary)] px-6 py-3 rounded-md font-medium hover:bg-[var(--color-primary)] hover:text-white transition-colors">
         View All Projects
       </a>
     </div>
