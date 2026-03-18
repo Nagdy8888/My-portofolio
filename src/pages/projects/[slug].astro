@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import { projects, categoryToBadgeClass } from '../../data/projects';
+import { getTechIconUrl } from '../../data/techIcons';
 import type { Project } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -29,14 +30,32 @@ const hasStructuredContent = project.problem || project.approach || project.resu
       </div>
       <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4">{project.title}</h1>
       <div class="flex flex-wrap gap-2 mb-6">
-        {project.tags.map((tag) => (
-          <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
-        ))}
+        {project.tags.map((tag) => {
+          const iconUrl = getTechIconUrl(tag);
+          return iconUrl ? (
+            <span class="tech-tag inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full">
+              <img src={iconUrl} alt="" width="16" height="16" class="flex-shrink-0" />
+              {tag}
+            </span>
+          ) : (
+            <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
+          );
+        })}
       </div>
 
       {project.image && (
         <div class="mb-8 rounded-md overflow-hidden border border-[var(--color-border)] shadow-md">
           <img src={project.image} alt={`${project.title} - project visual`} class="w-full h-auto object-cover" />
+        </div>
+      )}
+
+      {project.screenshots && project.screenshots.length > 0 && (
+        <div class="screenshot-gallery mb-8">
+          {project.screenshots.map((src, i) => (
+            <div class="screenshot-card">
+              <img src={src} alt={`Screenshot ${i + 1}`} class="w-full h-auto object-contain" />
+            </div>
+          ))}
         </div>
       )}
 

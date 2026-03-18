@@ -100,3 +100,68 @@ html.dark .badge-n8n { background: #9a3412; color: #fdba74; }
 /* Tag/skill pills (light blue in light mode) */
 .tag-pill { background: #dbeafe; color: var(--color-primary); }
 html.dark .tag-pill { background: rgba(30, 58, 138, 0.4); color: #93c5fd; }
+
+/* Tech tags with logo (project detail page) */
+.tech-tag {
+  background: #dbeafe;
+  color: #1d4ed8;
+  transition: box-shadow 0.2s ease;
+}
+.tech-tag:hover {
+  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+}
+.tech-tag img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+html.dark .tech-tag {
+  background: rgba(30, 58, 138, 0.4);
+  color: #93c5fd;
+}
+html.dark .tech-tag:hover {
+  box-shadow: 0 2px 8px rgba(147, 197, 253, 0.2);
+}
+
+/* Horizontal screenshot gallery (project detail page) */
+.screenshot-gallery {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
+}
+.screenshot-gallery::-webkit-scrollbar {
+  height: 6px;
+}
+.screenshot-gallery::-webkit-scrollbar-track {
+  background: var(--color-bg-alt);
+  border-radius: 3px;
+}
+.screenshot-gallery::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+.screenshot-gallery::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-light);
+}
+.screenshot-card {
+  flex-shrink: 0;
+  width: 75%;
+  max-width: 560px;
+  scroll-snap-align: start;
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.screenshot-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+html.dark .screenshot-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+}

@@ -22,6 +22,7 @@ export interface Project {
   results?: string;
   tools?: string[];
   image?: string;
+  screenshots?: string[];
 }
 
 /** Maps category to CSS badge class (e.g. "Machine Learning" -> "badge-ml") */
@@ -142,5 +143,28 @@ export const projects: Project[] = [
     results: "Efficient knowledge retrieval and real-time document search over Drive content; seamless file uploads and DB updates; scalable RAG with Supabase vectors and OpenAI embeddings.",
     tools: ["n8n", "OpenAI", "Supabase", "Google Drive", "PostgreSQL", "Embeddings", "RAG"],
     image: "/images/projects/n8n-rag-workflow.png",
+  },
+  {
+    slug: "image-analysis-agent",
+    title: "Image Analysis Agent",
+    shortDescription: "AI-powered product image tagging with LangGraph, GPT-4o vision, 8 parallel taggers, and search over structured tags in Supabase.",
+    fullDescription: "AI-powered image tagging for product imagery. Upload images, get structured tags (season, theme, colors, objects, and more) via LangGraph and OpenAI GPT-4o, store results in Supabase, and search or browse them in a modern web UI. Full-stack agent with single and bulk upload, real-time analysis, and cascading filter search.",
+    tags: ["LangGraph", "GPT-4o", "FastAPI", "Next.js", "React", "TypeScript", "Supabase", "PostgreSQL", "LangChain", "Pydantic", "Docker", "Tailwind CSS", "shadcn/ui", "AI Agent", "Computer Vision", "Prompt Engineering"],
+    featured: true,
+    categories: ["AI Agent"],
+    github: "https://github.com/Nagdy8888/image-analysis-agent",
+    keyResult: "Structured tags across 8 categories with confidence scores, parallel taggers, and AND search",
+    problem: "Product companies manage thousands of images that need consistent, structured tagging across categories like season, theme, colors, objects, mood, occasion, design elements, and product type. Manual tagging is slow and does not scale; existing tools lack confidence scores, validation, or structured taxonomy.",
+    approach: "Built a full-stack AI agent with a LangGraph DAG pipeline (12 nodes): preprocessor resizes and validates the image, a GPT-4o vision call produces a structured description, then 8 parallel taggers run on the text using a controlled taxonomy. A validator checks tags against the taxonomy, a confidence filter applies thresholds, and an aggregator produces the final TagRecord. Results are persisted in PostgreSQL (Supabase) with a flattened search index for fast multi-category AND queries. Frontend: single upload with real-time analysis, bulk upload with background processing and polling, search page with cascading filters.",
+    results: "Structured tags across 8 categories with per-tag confidence scores and needs-review flagging. Parallel tagger execution via LangGraph Send API reduces latency. Search with AND logic using PostgreSQL array containment and cascading filter options. Bulk upload with background processing and live polling. Full Docker deployment with one command.",
+    tools: ["LangGraph", "LangChain", "OpenAI GPT-4o", "Pydantic", "Python", "FastAPI", "Supabase", "PostgreSQL", "Next.js", "React", "TypeScript", "Tailwind CSS", "shadcn/ui", "Docker"],
+    image: "/images/projects/image-analysis-agent/01-home-before-upload.png",
+    screenshots: [
+      "/images/projects/image-analysis-agent/01-home-before-upload.png",
+      "/images/projects/image-analysis-agent/02-analyzing.png",
+      "/images/projects/image-analysis-agent/03-analysis-result.png",
+      "/images/projects/image-analysis-agent/04-search-page.png",
+      "/images/projects/image-analysis-agent/05-search-filters.png",
+    ],
   },
 ];
