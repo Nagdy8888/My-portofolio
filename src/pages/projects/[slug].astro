@@ -15,6 +15,13 @@ export function getStaticPaths() {
 
 const { project } = Astro.props;
 const hasStructuredContent = project.problem || project.approach || project.results;
+
+function toSentences(text: string): string[] {
+  return text
+    .split(/(?<=\.)\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
 ---
 
 <Layout title={`${project.title} | Mustafa Alnagdy`} description={project.shortDescription}>
@@ -105,27 +112,59 @@ const hasStructuredContent = project.problem || project.approach || project.resu
           {project.problem && (
             <section>
               <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">The Problem</h2>
-              <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.problem}</p>
+              {toSentences(project.problem).length > 1 ? (
+                <ul class="project-bullets">
+                  {toSentences(project.problem).map((s) => (
+                    <li>{s}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.problem}</p>
+              )}
             </section>
           )}
           {project.approach && (
             <section>
               <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">Approach</h2>
-              <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.approach}</p>
+              {toSentences(project.approach).length > 1 ? (
+                <div class="project-timeline">
+                  {toSentences(project.approach).map((s) => (
+                    <div class="timeline-step">{s}</div>
+                  ))}
+                </div>
+              ) : (
+                <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.approach}</p>
+              )}
             </section>
           )}
           {project.results && (
             <section>
               <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">Results</h2>
-              <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.results}</p>
-              {project.keyResult && <p class="mt-3 text-base font-semibold text-[var(--color-primary)]">{project.keyResult}</p>}
+              {toSentences(project.results).length > 1 ? (
+                <ul class="project-checks">
+                  {toSentences(project.results).map((s) => (
+                    <li>{s}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.results}</p>
+              )}
+              {project.keyResult && (
+                <div class="project-callout mt-4">
+                  <strong>Key result:</strong> {project.keyResult}
+                </div>
+              )}
             </section>
           )}
         </div>
       ) : (
         <div class="mb-8">
           <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.fullDescription}</p>
-          {project.keyResult && <p class="mt-4 text-base font-semibold text-[var(--color-primary)]">{project.keyResult}</p>}
+          {project.keyResult && (
+            <div class="project-callout mt-4">
+              <strong>Key result:</strong> {project.keyResult}
+            </div>
+          )}
         </div>
       )}
 
