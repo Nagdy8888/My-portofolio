@@ -43,21 +43,62 @@ const hasStructuredContent = project.problem || project.approach || project.resu
         })}
       </div>
 
-      {project.image && (
+      {project.screenshots && project.screenshots.length > 0 ? (
+        <div class="screenshot-gallery mb-8" id="screenshot-gallery">
+          {project.screenshots.map((src, i) => (
+            <button type="button" class="screenshot-card" data-screenshot-src={src} aria-label={`View screenshot ${i + 1} full size`}>
+              <img src={src} alt={`Screenshot ${i + 1}`} class="w-full h-auto object-contain" />
+            </button>
+          ))}
+        </div>
+      ) : project.image ? (
         <div class="mb-8 rounded-md overflow-hidden border border-[var(--color-border)] shadow-md">
           <img src={project.image} alt={`${project.title} - project visual`} class="w-full h-auto object-cover" />
         </div>
-      )}
+      ) : null}
 
-      {project.screenshots && project.screenshots.length > 0 && (
-        <div class="screenshot-gallery mb-8">
-          {project.screenshots.map((src, i) => (
-            <div class="screenshot-card">
-              <img src={src} alt={`Screenshot ${i + 1}`} class="w-full h-auto object-contain" />
-            </div>
-          ))}
+      <div id="screenshot-lightbox" class="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Screenshot full size" hidden>
+        <button type="button" class="screenshot-lightbox-backdrop" aria-label="Close"></button>
+        <div class="screenshot-lightbox-content">
+          <img id="screenshot-lightbox-img" src="" alt="Screenshot full size" />
+          <button type="button" class="screenshot-lightbox-close" aria-label="Close">&times;</button>
         </div>
-      )}
+      </div>
+
+      <script>
+        const gallery = document.getElementById('screenshot-gallery');
+        const lightbox = document.getElementById('screenshot-lightbox');
+        const lightboxImg = document.getElementById('screenshot-lightbox-img');
+        const backdrop = lightbox?.querySelector('.screenshot-lightbox-backdrop');
+        const closeBtn = lightbox?.querySelector('.screenshot-lightbox-close');
+
+        function openLightbox(src: string) {
+          if (!lightbox || !lightboxImg) return;
+          lightboxImg.setAttribute('src', src);
+          lightbox.removeAttribute('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+          if (!lightbox) return;
+          lightbox.setAttribute('hidden', '');
+          document.body.style.overflow = '';
+        }
+
+        gallery?.querySelectorAll('.screenshot-card[data-screenshot-src]').forEach((card) => {
+          card.addEventListener('click', () => {
+            const src = card.getAttribute('data-screenshot-src');
+            if (src) openLightbox(src);
+          });
+        });
+
+        backdrop?.addEventListener('click', closeLightbox);
+        closeBtn?.addEventListener('click', closeLightbox);
+
+        lightbox?.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeLightbox();
+        });
+      </script>
 
       {hasStructuredContent ? (
         <div class="space-y-8 mb-8">
