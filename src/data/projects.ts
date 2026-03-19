@@ -1,3 +1,5 @@
+import { imageAnalysisAgentDiagrams } from "./imageAnalysisAgentDiagrams";
+
 export type ProjectCategory =
   | "Machine Learning"
   | "Data Analysis"
@@ -23,6 +25,8 @@ export interface Project {
   tools?: string[];
   image?: string;
   screenshots?: string[];
+  /** Optional Mermaid diagram definitions (title + raw mermaid code) for architecture/flow sections */
+  diagrams?: { title: string; mermaid: string }[];
 }
 
 /** Maps category to CSS badge class (e.g. "Machine Learning" -> "badge-ml") */
@@ -166,5 +170,6 @@ export const projects: Project[] = [
       "/images/projects/image-analysis-agent/04-search-page.png",
       "/images/projects/image-analysis-agent/05-search-filters.png",
     ],
+    diagrams: imageAnalysisAgentDiagrams,
   },
 ];

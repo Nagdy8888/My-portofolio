@@ -340,3 +340,24 @@ html.dark .project-callout {
 html.dark .project-callout strong {
   color: var(--color-primary);
 }
+
+/* Mermaid diagrams (project architecture / flows) */
+.diagrams-section {
+  width: 100%;
+}
+.diagram-block {
+  width: 100%;
+}
+.mermaid-container {
+  overflow-x: auto;
+  padding: 1rem 0;
+  min-height: 120px;
+}
+.mermaid-container .mermaid {
+  display: flex;
+  justify-content: center;
+}
+.mermaid-container .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
