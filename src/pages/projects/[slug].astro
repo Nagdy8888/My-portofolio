@@ -127,10 +127,16 @@ function toSentences(text: string): string[] {
             <section>
               <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">Approach</h2>
               {toSentences(project.approach).length > 1 ? (
-                <div class="project-timeline">
-                  {toSentences(project.approach).map((s) => (
-                    <div class="timeline-step">{s}</div>
-                  ))}
+                <div class="project-graph" role="img" aria-label="Approach steps as a flowchart">
+                  {toSentences(project.approach).map((s, i) => {
+                    const steps = toSentences(project.approach);
+                    return (
+                      <>
+                        <div class="graph-node">{s}</div>
+                        {i < steps.length - 1 ? <div class="graph-connector" aria-hidden="true" /> : null}
+                      </>
+                    );
+                  })}
                 </div>
               ) : (
                 <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.approach}</p>
@@ -186,31 +192,35 @@ function toSentences(text: string): string[] {
 
       {project.diagrams && project.diagrams.length > 0 && (
         <script type="module">
-          const blocks = document.querySelectorAll(".diagram-block[data-diagram-mermaid]");
-          if (blocks.length === 0) return;
-          const mermaid = (await import("https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs")).default;
-          blocks.forEach((block) => {
-            const raw = block.getAttribute("data-diagram-mermaid");
-            if (!raw) return;
-            try {
-              const code = JSON.parse(raw);
+          import mermaid from "mermaid";
+          (async function () {
+            const blocks = document.querySelectorAll(".diagram-block[data-diagram-mermaid]");
+            if (blocks.length === 0) return;
+            const isDark = document.documentElement.classList.contains("dark");
+            mermaid.initialize({
+              startOnLoad: false,
+              theme: isDark ? "dark" : "base",
+              themeVariables: isDark
+                ? { primaryColor: "#60a5fa", primaryTextColor: "#f1f5f9", primaryBorderColor: "#334155", lineColor: "#94a3b8", secondaryColor: "#1e293b", tertiaryColor: "#0f172a" }
+                : undefined,
+            });
+            for (let i = 0; i < blocks.length; i++) {
+              const block = blocks[i];
+              const raw = block.getAttribute("data-diagram-mermaid");
               const container = block.querySelector(".mermaid-container");
-              if (!container) return;
-              const pre = document.createElement("pre");
-              pre.className = "mermaid";
-              pre.textContent = code;
-              container.appendChild(pre);
-            } catch (_) {}
-          });
-          const isDark = document.documentElement.classList.contains("dark");
-          mermaid.initialize({
-            startOnLoad: false,
-            theme: isDark ? "dark" : "base",
-            themeVariables: isDark
-              ? { primaryColor: "#60a5fa", primaryTextColor: "#f1f5f9", primaryBorderColor: "#334155", lineColor: "#94a3b8", secondaryColor: "#1e293b", tertiaryColor: "#0f172a" }
-              : undefined,
-          });
-          await mermaid.run();
+              if (!raw || !container) continue;
+              try {
+                const code = JSON.parse(raw);
+                const id = "mermaid-diagram-" + i;
+                const { svg, bindFunctions } = await mermaid.render(id, code);
+                container.innerHTML = svg;
+                if (typeof bindFunctions === "function") bindFunctions(container);
+              } catch (e) {
+                console.warn("Mermaid render failed for diagram " + i, e);
+                container.innerHTML = '<p class="text-[var(--color-text-light)] text-sm">Diagram could not be rendered.</p>';
+              }
+            }
+          })();
         </script>
       )}
 
