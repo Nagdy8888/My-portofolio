@@ -1,6 +1,6 @@
 ---
-import { projects, categoryToBadgeClass } from '../data/projects';
-const featured = projects.filter((p) => p.featured).slice(0, 6);
+import { projectsByRecent, categoryToBadgeClass } from '../data/projects';
+const featured = projectsByRecent.filter((p) => p.featured).slice(0, 6);
 ---
 
 <section id="projects" class="py-16 md:py-20 bg-[var(--color-bg-alt)] animate-on-scroll">

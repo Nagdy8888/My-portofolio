@@ -27,6 +27,10 @@ export interface Project {
   screenshots?: string[];
   /** Optional Mermaid diagram definitions (title + raw mermaid code) for architecture/flow sections */
   diagrams?: { title: string; mermaid: string }[];
+  /** Year (e.g. 2024) for ordering: recent first when listing projects */
+  year?: number;
+  /** Month 1–12 for ordering within the same year */
+  month?: number;
 }
 
 /** Maps category to CSS badge class (e.g. "Machine Learning" -> "badge-ml") */
@@ -57,6 +61,8 @@ export const projects: Project[] = [
     results: "Achieved a model that correlates process inputs with reaction yield, enabling data-driven optimization of chemical process parameters.",
     tools: ["Python", "Scikit-learn", "Pandas", "NumPy"],
     image: "/images/projects/chemical-process-ml.svg",
+    year: 2024,
+    month: 3,
   },
   {
     slug: "anomaly-detection-multiphase-flow",
@@ -72,6 +78,8 @@ export const projects: Project[] = [
     results: "Improved detection accuracy for air leakage and air blockage, enabling faster response to abnormal conditions in the facility.",
     tools: ["Python", "Scikit-learn", "Pandas", "Matplotlib"],
     image: "/images/projects/anomaly-detection.svg",
+    year: 2024,
+    month: 7,
   },
   {
     slug: "gas-eur-prediction",
@@ -87,6 +95,8 @@ export const projects: Project[] = [
     results: "Achieved high correlation with actual EUR values and identified the most influential well parameters for reservoir performance forecasting.",
     tools: ["Python", "Scikit-learn", "Pandas", "Seaborn"],
     image: "/images/projects/gas-eur.svg",
+    year: 2024,
+    month: 9,
   },
   {
     slug: "steel-electrical-load-prediction",
@@ -102,6 +112,8 @@ export const projects: Project[] = [
     results: "Enabled prediction of load levels across 35k+ production cycles, supporting optimized production scheduling and better load management.",
     tools: ["Python", "Scikit-learn", "Pandas", "NumPy"],
     image: "/images/projects/steel-load.svg",
+    year: 2024,
+    month: 11,
   },
   {
     slug: "n8n-ai-social-workflow",
@@ -117,6 +129,8 @@ export const projects: Project[] = [
     results: "Hands-free social media management: single input (Telegram) drives content creation, search, and posting across Instagram, TikTok, X, and YouTube, with activity logging and scalable agent design.",
     tools: ["n8n", "OpenAI", "Telegram", "Tavily", "Apify (YouTube/Instagram/TikTok)", "Image/Video tools"],
     image: "/images/projects/n8n-social-workflow.png",
+    year: 2025,
+    month: 2,
   },
   {
     slug: "n8n-slack-knowledge-workflow",
@@ -132,6 +146,8 @@ export const projects: Project[] = [
     results: "Scalable system for team collaboration: smart scheduling, contextual Slack memory, automated email, and AI-assisted document search over Drive files, with database setup and document metadata tables.",
     tools: ["n8n", "OpenAI", "Slack", "Google Calendar", "Gmail", "PostgreSQL", "Supabase", "Google Drive"],
     image: "/images/projects/n8n-slack-knowledge-workflow.png",
+    year: 2025,
+    month: 5,
   },
   {
     slug: "n8n-rag-ai-workflow",
@@ -147,6 +163,8 @@ export const projects: Project[] = [
     results: "Efficient knowledge retrieval and real-time document search over Drive content; seamless file uploads and DB updates; scalable RAG with Supabase vectors and OpenAI embeddings.",
     tools: ["n8n", "OpenAI", "Supabase", "Google Drive", "PostgreSQL", "Embeddings", "RAG"],
     image: "/images/projects/n8n-rag-workflow.png",
+    year: 2025,
+    month: 8,
   },
   {
     slug: "image-analysis-agent",
@@ -171,5 +189,14 @@ export const projects: Project[] = [
       "/images/projects/image-analysis-agent/05-search-filters.png",
     ],
     diagrams: imageAnalysisAgentDiagrams.filter((d) => d.title === "System Overview"),
+    year: 2026,
+    month: 3,
   },
 ];
+
+/** Projects ordered with most recent first (by year then month descending). Use for listing pages. */
+export const projectsByRecent: Project[] = [...projects].sort((a, b) => {
+  const y = (b.year ?? 0) - (a.year ?? 0);
+  if (y !== 0) return y;
+  return (b.month ?? 0) - (a.month ?? 0);
+});

@@ -2,9 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import { projects, categoryToBadgeClass } from '../../data/projects';
+import { projectsByRecent, categoryToBadgeClass } from '../../data/projects';
 
-const categories = Array.from(new Set(projects.flatMap((p) => p.categories))).sort();
+const categories = Array.from(new Set(projectsByRecent.flatMap((p) => p.categories))).sort();
 ---
 
 <Layout title="Projects | Mustafa Alnagdy" description="Portfolio projects - ML, data science, and process engineering.">
@@ -27,7 +27,7 @@ const categories = Array.from(new Set(projects.flatMap((p) => p.categories))).so
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project) => (
+        {projectsByRecent.map((project) => (
           <a href={`/projects/${project.slug}`} class="block group project-card" data-categories={project.categories.join(",")}>
             <div class="bg-[var(--color-surface)] rounded-md p-6 border border-[var(--color-border)] shadow-md group-hover:shadow-lg transition-shadow h-full">
               <div class="flex flex-wrap gap-1.5 mb-3">
