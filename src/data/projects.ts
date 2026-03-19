@@ -170,6 +170,6 @@ export const projects: Project[] = [
       "/images/projects/image-analysis-agent/04-search-page.png",
       "/images/projects/image-analysis-agent/05-search-filters.png",
     ],
-    diagrams: imageAnalysisAgentDiagrams,
+    diagrams: imageAnalysisAgentDiagrams.filter((d) => d.title === "System Overview"),
   },
 ];

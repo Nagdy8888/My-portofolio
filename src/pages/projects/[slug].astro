@@ -182,13 +182,27 @@ function toSentences(text: string): string[] {
               {project.diagrams.map((d, idx) => (
                 <div class="diagram-block">
                   <h3 class="text-lg font-medium text-[var(--color-text)] mb-3">{d.title}</h3>
-                  <div class="mermaid-container">
+                  <button type="button" class="mermaid-container mermaid-container-clickable" data-diagram-index={idx} aria-label="Open diagram at full size with zoom">
                     <script type="application/json" set:html={JSON.stringify(d.mermaid).replace(/<\/script>/gi, "<\\/script>")} />
-                  </div>
+                  </button>
                 </div>
               ))}
             </div>
           </section>
+          <div id="diagram-lightbox" class="diagram-lightbox" role="dialog" aria-modal="true" aria-label="Diagram full size" hidden>
+            <button type="button" class="diagram-lightbox-backdrop" aria-label="Close"></button>
+            <div class="diagram-lightbox-content">
+              <div class="diagram-lightbox-toolbar">
+                <button type="button" class="diagram-lightbox-zoom diagram-zoom-out" aria-label="Zoom out">−</button>
+                <span class="diagram-lightbox-scale">100%</span>
+                <button type="button" class="diagram-lightbox-zoom diagram-zoom-in" aria-label="Zoom in">+</button>
+                <button type="button" class="diagram-lightbox-close" aria-label="Close">&times;</button>
+              </div>
+              <div class="diagram-lightbox-svg-wrap">
+                <div class="diagram-lightbox-svg-inner"></div>
+              </div>
+            </div>
+          </div>
           <script type="importmap" set:html={JSON.stringify({ imports: { mermaid: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs" } })} />
           <script type="module">
             (async function () {
@@ -228,6 +242,62 @@ function toSentences(text: string): string[] {
                   container.innerHTML = '<p class="text-[var(--color-text-light)] text-sm">Diagram could not be rendered.</p>';
                 }
               }
+
+              const lightbox = document.getElementById("diagram-lightbox");
+              const backdrop = lightbox?.querySelector(".diagram-lightbox-backdrop");
+              const closeBtn = lightbox?.querySelector(".diagram-lightbox-close");
+              const inner = lightbox?.querySelector(".diagram-lightbox-svg-inner");
+              const scaleEl = lightbox?.querySelector(".diagram-lightbox-scale");
+              const zoomInBtn = lightbox?.querySelector(".diagram-zoom-in");
+              const zoomOutBtn = lightbox?.querySelector(".diagram-zoom-out");
+              if (!lightbox || !inner || !scaleEl) return;
+
+              let scale = 1;
+              const minScale = 0.25;
+              const maxScale = 4;
+              const step = 0.25;
+
+              function updateScale() {
+                inner.style.transform = "scale(" + scale + ")";
+                scaleEl.textContent = Math.round(scale * 100) + "%";
+              }
+
+              function openDiagram(container) {
+                const svg = container.querySelector("svg");
+                if (!svg) return;
+                inner.innerHTML = "";
+                inner.appendChild(svg.cloneNode(true));
+                scale = 1;
+                updateScale();
+                lightbox.removeAttribute("hidden");
+                document.body.style.overflow = "hidden";
+              }
+
+              function closeDiagram() {
+                lightbox.setAttribute("hidden", "");
+                document.body.style.overflow = "";
+              }
+
+              document.querySelectorAll(".mermaid-container-clickable").forEach((btn) => {
+                btn.addEventListener("click", () => openDiagram(btn));
+              });
+              backdrop?.addEventListener("click", closeDiagram);
+              closeBtn?.addEventListener("click", closeDiagram);
+              zoomInBtn?.addEventListener("click", () => {
+                if (scale < maxScale) {
+                  scale = Math.min(maxScale, scale + step);
+                  updateScale();
+                }
+              });
+              zoomOutBtn?.addEventListener("click", () => {
+                if (scale > minScale) {
+                  scale = Math.max(minScale, scale - step);
+                  updateScale();
+                }
+              });
+              lightbox.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") closeDiagram();
+              });
             })();
           </script>
         </>
