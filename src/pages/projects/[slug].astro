@@ -175,53 +175,62 @@ function toSentences(text: string): string[] {
       )}
 
       {project.diagrams && project.diagrams.length > 0 && (
-        <section class="mb-8 diagrams-section" aria-labelledby="diagrams-heading">
-          <h2 id="diagrams-heading" class="text-xl font-semibold text-[var(--color-text)] mb-4">Architecture &amp; Flows</h2>
-          <div class="space-y-10">
-            {project.diagrams.map((d) => (
-              <div class="diagram-block" data-diagram-mermaid={JSON.stringify(d.mermaid)}>
-                <h3 class="text-lg font-medium text-[var(--color-text)] mb-3">{d.title}</h3>
-                <div class="mermaid-container">
-                  {/* Mermaid source injected by script to avoid HTML escaping of & and " */}
+        <>
+          <section class="mb-8 diagrams-section" aria-labelledby="diagrams-heading">
+            <h2 id="diagrams-heading" class="text-xl font-semibold text-[var(--color-text)] mb-4">Architecture &amp; Flows</h2>
+            <div class="space-y-10">
+              {project.diagrams.map((d, idx) => (
+                <div class="diagram-block">
+                  <h3 class="text-lg font-medium text-[var(--color-text)] mb-3">{d.title}</h3>
+                  <div class="mermaid-container">
+                    <script type="application/json" set:html={JSON.stringify(d.mermaid).replace(/<\/script>/gi, "<\\/script>")} />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {project.diagrams && project.diagrams.length > 0 && (
-        <script type="module">
-          import mermaid from "mermaid";
-          (async function () {
-            const blocks = document.querySelectorAll(".diagram-block[data-diagram-mermaid]");
-            if (blocks.length === 0) return;
-            const isDark = document.documentElement.classList.contains("dark");
-            mermaid.initialize({
-              startOnLoad: false,
-              theme: isDark ? "dark" : "base",
-              themeVariables: isDark
-                ? { primaryColor: "#60a5fa", primaryTextColor: "#f1f5f9", primaryBorderColor: "#334155", lineColor: "#94a3b8", secondaryColor: "#1e293b", tertiaryColor: "#0f172a" }
-                : undefined,
-            });
-            for (let i = 0; i < blocks.length; i++) {
-              const block = blocks[i];
-              const raw = block.getAttribute("data-diagram-mermaid");
-              const container = block.querySelector(".mermaid-container");
-              if (!raw || !container) continue;
+              ))}
+            </div>
+          </section>
+          <script type="importmap" set:html={JSON.stringify({ imports: { mermaid: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs" } })} />
+          <script type="module">
+            (async function () {
+              const blocks = document.querySelectorAll(".diagram-block");
+              const containers = document.querySelectorAll(".mermaid-container");
+              if (blocks.length === 0 || blocks.length !== containers.length) return;
+              let mermaid;
               try {
-                const code = JSON.parse(raw);
-                const id = "mermaid-diagram-" + i;
-                const { svg, bindFunctions } = await mermaid.render(id, code);
-                container.innerHTML = svg;
-                if (typeof bindFunctions === "function") bindFunctions(container);
+                mermaid = (await import("mermaid")).default;
               } catch (e) {
-                console.warn("Mermaid render failed for diagram " + i, e);
-                container.innerHTML = '<p class="text-[var(--color-text-light)] text-sm">Diagram could not be rendered.</p>';
+                console.warn("Mermaid load failed", e);
+                return;
               }
-            }
-          })();
-        </script>
+              const isDark = document.documentElement.classList.contains("dark");
+              mermaid.initialize({
+                startOnLoad: false,
+                theme: isDark ? "dark" : "base",
+                themeVariables: isDark
+                  ? { primaryColor: "#60a5fa", primaryTextColor: "#f1f5f9", primaryBorderColor: "#334155", lineColor: "#94a3b8", secondaryColor: "#1e293b", tertiaryColor: "#0f172a" }
+                  : undefined,
+              });
+              for (let i = 0; i < blocks.length; i++) {
+                const container = containers[i];
+                const dataScript = container.querySelector("script[type='application/json']");
+                if (!dataScript || !container) continue;
+                try {
+                  const code = JSON.parse(dataScript.textContent || "null");
+                  if (typeof code !== "string") continue;
+                  const id = "mermaid-diagram-" + i + "-" + Math.random().toString(36).slice(2, 9);
+                  const { svg, bindFunctions } = await mermaid.render(id, code);
+                  dataScript.remove();
+                  container.innerHTML = svg;
+                  if (typeof bindFunctions === "function") bindFunctions(container);
+                } catch (e) {
+                  console.warn("Mermaid render failed for diagram " + i, e);
+                  if (dataScript) dataScript.remove();
+                  container.innerHTML = '<p class="text-[var(--color-text-light)] text-sm">Diagram could not be rendered.</p>';
+                }
+              }
+            })();
+          </script>
+        </>
       )}
 
       {project.tools && project.tools.length > 0 && (
