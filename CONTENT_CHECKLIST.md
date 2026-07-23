@@ -7,7 +7,7 @@ unsupported fields out of the public site rather than using placeholders or esti
 
 - [ ] Confirm the preferred public title (for example, Data Scientist, ML Engineer, or AI Engineer).
 - [ ] Confirm whether the MIS internship is still current and update its end date if needed.
-- [ ] Confirm graduation status after June 2026.
+- [x] Confirmed graduated in June 2026 with a cumulative GPA of 3.65.
 - [ ] Confirm whether the DataCamp certificate is still in progress or completed.
 - [ ] Confirm the preferred location, remote-work, and relocation wording.
 
