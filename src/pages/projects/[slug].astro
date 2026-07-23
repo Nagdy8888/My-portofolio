@@ -112,23 +112,79 @@ function toSentences(text: string): string[] {
       <div id="screenshot-lightbox" class="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Project visual full size" tabindex="-1" hidden>
         <button type="button" class="screenshot-lightbox-backdrop" aria-label="Close"></button>
         <div class="screenshot-lightbox-content">
-          <img id="screenshot-lightbox-img" src="" alt="Project visual full size" />
-          <button type="button" class="screenshot-lightbox-close" aria-label="Close">&times;</button>
+          <div class="screenshot-lightbox-toolbar">
+            <button type="button" class="screenshot-lightbox-zoom screenshot-zoom-out" aria-label="Zoom out">−</button>
+            <span class="screenshot-lightbox-scale" aria-live="polite">100%</span>
+            <button type="button" class="screenshot-lightbox-zoom screenshot-zoom-in" aria-label="Zoom in">+</button>
+            <button type="button" class="screenshot-lightbox-zoom screenshot-zoom-reset" aria-label="Reset zoom">Reset</button>
+            <button type="button" class="screenshot-lightbox-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="screenshot-lightbox-viewport">
+            <img id="screenshot-lightbox-img" src="" alt="Project visual full size" />
+            <div id="screenshot-lightbox-svg" class="screenshot-lightbox-svg" role="img" hidden></div>
+          </div>
         </div>
       </div>
 
       <script>
         const lightbox = document.getElementById('screenshot-lightbox');
         const lightboxImg = document.getElementById('screenshot-lightbox-img');
+        const lightboxSvg = document.getElementById('screenshot-lightbox-svg');
         const backdrop = lightbox?.querySelector('.screenshot-lightbox-backdrop');
         const closeBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-lightbox-close');
+        const zoomInBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-zoom-in');
+        const zoomOutBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-zoom-out');
+        const zoomResetBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-zoom-reset');
+        const zoomScale = lightbox?.querySelector<HTMLElement>('.screenshot-lightbox-scale');
         let screenshotTrigger: HTMLElement | null = null;
+        let zoomTarget: HTMLElement | SVGElement | null = null;
+        let zoom = 1;
+        const minZoom = 0.5;
+        const maxZoom = 4;
+        const zoomStep = 0.25;
+
+        function updateZoom() {
+          if (!zoomTarget) return;
+          zoomTarget.style.width = `${zoom * 100}%`;
+          zoomTarget.style.maxWidth = 'none';
+          zoomTarget.style.height = 'auto';
+          zoomScale && (zoomScale.textContent = `${Math.round(zoom * 100)}%`);
+          if (zoomInBtn) zoomInBtn.disabled = zoom >= maxZoom;
+          if (zoomOutBtn) zoomOutBtn.disabled = zoom <= minZoom;
+        }
+
+        function setZoom(nextZoom: number) {
+          zoom = Math.min(maxZoom, Math.max(minZoom, nextZoom));
+          updateZoom();
+        }
 
         function openLightbox(src: string, alt: string, trigger: HTMLElement) {
-          if (!lightbox || !lightboxImg) return;
+          if (
+            !lightbox ||
+            !(lightboxImg instanceof HTMLImageElement) ||
+            !(lightboxSvg instanceof HTMLElement)
+          ) return;
+
           screenshotTrigger = trigger;
-          lightboxImg.setAttribute('src', src);
-          lightboxImg.setAttribute('alt', alt);
+          const renderedDiagram = trigger.querySelector<SVGSVGElement>('[data-mermaid-diagram] svg');
+
+          if (renderedDiagram) {
+            lightboxImg.hidden = true;
+            lightboxSvg.hidden = false;
+            lightboxSvg.setAttribute('aria-label', alt);
+            lightboxSvg.replaceChildren(renderedDiagram.cloneNode(true));
+            zoomTarget = lightboxSvg.querySelector<SVGSVGElement>('svg');
+          } else {
+            lightboxSvg.hidden = true;
+            lightboxSvg.replaceChildren();
+            lightboxImg.hidden = false;
+            lightboxImg.setAttribute('src', src);
+            lightboxImg.setAttribute('alt', alt);
+            zoomTarget = lightboxImg;
+          }
+
+          zoom = 1;
+          updateZoom();
           lightbox.removeAttribute('hidden');
           document.body.style.overflow = 'hidden';
           closeBtn?.focus();
@@ -138,6 +194,17 @@ function toSentences(text: string): string[] {
           if (!lightbox) return;
           lightbox.setAttribute('hidden', '');
           document.body.style.overflow = '';
+          if (lightboxImg instanceof HTMLImageElement) {
+            lightboxImg.removeAttribute('src');
+            lightboxImg.style.removeProperty('width');
+            lightboxImg.style.removeProperty('max-width');
+          }
+          if (lightboxSvg instanceof HTMLElement) {
+            lightboxSvg.replaceChildren();
+            lightboxSvg.style.removeProperty('width');
+            lightboxSvg.style.removeProperty('max-width');
+          }
+          zoomTarget = null;
           screenshotTrigger?.focus();
           screenshotTrigger = null;
         }
@@ -152,9 +219,24 @@ function toSentences(text: string): string[] {
 
         backdrop?.addEventListener('click', closeLightbox);
         closeBtn?.addEventListener('click', closeLightbox);
+        zoomInBtn?.addEventListener('click', () => setZoom(zoom + zoomStep));
+        zoomOutBtn?.addEventListener('click', () => setZoom(zoom - zoomStep));
+        zoomResetBtn?.addEventListener('click', () => setZoom(1));
 
         lightbox?.addEventListener('keydown', (e: KeyboardEvent) => {
           if (e.key === 'Escape') closeLightbox();
+          if (e.key === '+' || e.key === '=') {
+            e.preventDefault();
+            setZoom(zoom + zoomStep);
+          }
+          if (e.key === '-') {
+            e.preventDefault();
+            setZoom(zoom - zoomStep);
+          }
+          if (e.key === '0') {
+            e.preventDefault();
+            setZoom(1);
+          }
           if (e.key !== 'Tab' || !lightbox) return;
           const focusable = Array.from(
             lightbox.querySelectorAll<HTMLElement>('button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')
