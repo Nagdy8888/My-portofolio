@@ -259,14 +259,14 @@ export const projects: Project[] = [
     screenshots: [
       "/images/projects/reel-movie-agent/landing.webp",
       "/images/projects/reel-movie-agent/login.webp",
-      "/images/projects/reel-movie-agent/answer-network.webp",
       "/images/projects/reel-movie-agent/full-network.webp",
+      "/images/projects/reel-movie-agent/answer-network.webp",
     ],
     screenshotAlts: [
       "Reel landing page introducing the GraphRAG movie assistant with cinematic artwork",
       "Reel login page with email, password, and demo account controls",
-      "Reel chat workspace showing a cited Hunger Games answer and its focused knowledge graph",
       "Reel full movie network page visualizing more than six thousand graph nodes",
+      "Reel chat workspace showing a cited Hunger Games answer and its focused knowledge graph",
     ],
     diagrams: reelMovieAgentDiagrams,
     year: 2026,
