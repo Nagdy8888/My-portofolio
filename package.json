@@ -1,17 +1,26 @@
 {
-  "name": "super-star",
+  "name": "mustafa-alnagdy-portfolio",
+  "description": "Portfolio case studies in data science, AI agents, and industrial process systems.",
+  "private": true,
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "validate:content": "node scripts/validate-content.mjs",
+    "qa:local": "node scripts/crawl-local.mjs",
+    "verify": "npm run check && npm run validate:content && npm run build",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^5.17.1",
-    "mermaid": "^10.9.5",
     "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9"
   }
 }

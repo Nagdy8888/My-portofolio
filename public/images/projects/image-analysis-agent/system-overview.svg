@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Image Analysis Agent system architecture</title>
+  <desc id="desc">Next.js clients call a FastAPI backend, which runs a LangGraph image analysis pipeline connected to OpenAI GPT-4o and Supabase PostgreSQL.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="900" rx="32" fill="#0f172a"/>
+  <text x="80" y="82" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="38" font-weight="700">Image Analysis Agent  System Overview</text>
+  <text x="80" y="124" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="20">Full-stack image tagging, validation, persistence, and search</text>
+
+  <rect x="70" y="180" width="310" height="610" rx="22" fill="#172554" stroke="#3b82f6" stroke-width="2"/>
+  <text x="100" y="230" fill="#93c5fd" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="700">NEXT.JS FRONTEND</text>
+  <rect x="100" y="270" width="250" height="90" rx="14" fill="#1e293b" stroke="#475569"/>
+  <text x="225" y="325" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22">Single Upload</text>
+  <rect x="100" y="390" width="250" height="90" rx="14" fill="#1e293b" stroke="#475569"/>
+  <text x="225" y="445" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22">Bulk Upload</text>
+  <rect x="100" y="510" width="250" height="90" rx="14" fill="#1e293b" stroke="#475569"/>
+  <text x="225" y="565" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22">Search &amp; Filters</text>
+  <rect x="100" y="630" width="250" height="90" rx="14" fill="#1e293b" stroke="#475569"/>
+  <text x="225" y="685" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22">Analysis Results</text>
+
+  <rect x="470" y="180" width="300" height="610" rx="22" fill="#172554" stroke="#3b82f6" stroke-width="2"/>
+  <text x="500" y="230" fill="#93c5fd" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="700">FASTAPI BACKEND</text>
+  <rect x="505" y="290" width="230" height="110" rx="14" fill="#1e293b" stroke="#475569"/>
+  <text x="620" y="338" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22">REST API</text>
+  <text x="620" y="370" text-anchor="middle" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="17">analyze · search · status</text>
+  <rect x="505" y="465" width="230" height="110" rx="14" fill="#1e293b" stroke="#475569"/>
+  <text x="620" y="513" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="22">Background Tasks</text>
+  <text x="620" y="545" text-anchor="middle" fill="#94a3b8" font-family="Inter,Arial,sans-serif" font-size="17">bulk processing &amp; polling</text>
+
+  <rect x="860" y="180" width="660" height="430" rx="22" fill="#172554" stroke="#3b82f6" stroke-width="2"/>
+  <text x="890" y="230" fill="#93c5fd" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="700">LANGGRAPH PIPELINE</text>
+  <rect x="900" y="285" width="130" height="76" rx="12" fill="#1e293b" stroke="#475569"/>
+  <text x="965" y="330" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="18">Preprocess</text>
+  <rect x="1080" y="285" width="130" height="76" rx="12" fill="#1e293b" stroke="#475569"/>
+  <text x="1145" y="330" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="18">Vision</text>
+  <rect x="1260" y="270" width="210" height="106" rx="12" fill="#0c4a6e" stroke="#38bdf8"/>
+  <text x="1365" y="315" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="18">8 Parallel Taggers</text>
+  <text x="1365" y="345" text-anchor="middle" fill="#bae6fd" font-family="Inter,Arial,sans-serif" font-size="16">season · theme · color · object</text>
+  <rect x="900" y="455" width="150" height="76" rx="12" fill="#1e293b" stroke="#475569"/>
+  <text x="975" y="500" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="18">Validate</text>
+  <rect x="1100" y="455" width="170" height="76" rx="12" fill="#1e293b" stroke="#475569"/>
+  <text x="1185" y="500" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="18">Confidence Filter</text>
+  <rect x="1320" y="455" width="150" height="76" rx="12" fill="#1e293b" stroke="#475569"/>
+  <text x="1395" y="500" text-anchor="middle" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="18">Aggregate</text>
+
+  <rect x="860" y="660" width="300" height="130" rx="22" fill="#14532d" stroke="#4ade80" stroke-width="2"/>
+  <text x="1010" y="712" text-anchor="middle" fill="#bbf7d0" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="700">SUPABASE</text>
+  <text x="1010" y="750" text-anchor="middle" fill="#f0fdf4" font-family="Inter,Arial,sans-serif" font-size="20">PostgreSQL + search index</text>
+  <rect x="1220" y="660" width="300" height="130" rx="22" fill="#3f3f46" stroke="#a1a1aa" stroke-width="2"/>
+  <text x="1370" y="712" text-anchor="middle" fill="#f4f4f5" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="700">OPENAI GPT-4o</text>
+  <text x="1370" y="750" text-anchor="middle" fill="#d4d4d8" font-family="Inter,Arial,sans-serif" font-size="20">vision + structured tagging</text>
+
+  <g fill="none" stroke="#38bdf8" stroke-width="4" marker-end="url(#arrow)">
+    <path d="M380 485 H470"/>
+    <path d="M770 345 H860"/>
+    <path d="M1030 323 H1080"/>
+    <path d="M1210 323 H1260"/>
+    <path d="M1365 376 V410 H975 V455"/>
+    <path d="M1050 493 H1100"/>
+    <path d="M1270 493 H1320"/>
+    <path d="M1395 531 V625 H1010 V660"/>
+    <path d="M1145 285 V255 H1370 V660"/>
+  </g>
+</svg>
