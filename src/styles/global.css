@@ -375,3 +375,17 @@ html.dark .project-callout {
 html.dark .project-callout strong {
   color: var(--color-primary);
 }
+
+.mermaid-diagram {
+  min-height: 18rem;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.mermaid-diagram svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}

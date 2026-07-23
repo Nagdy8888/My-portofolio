@@ -8,7 +8,7 @@ AI agents, and machine learning for industrial and process-system data.
 - **Astro 5** — static site, file-based routing
 - **Tailwind CSS v4** — styling via `@tailwindcss/vite`
 - **TypeScript** — project data and types
-- **Static SVG architecture** — accessible diagrams without a client runtime
+- **Mermaid + SVG fallback** — interactive architecture rendered only on diagram pages
 - **Astro Sitemap** — enabled when `SITE_URL` is configured
 
 ## Project structure

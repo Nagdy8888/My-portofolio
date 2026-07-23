@@ -39,7 +39,7 @@ export interface Project {
   imageHeight?: number;
   screenshots?: string[];
   screenshotAlts?: string[];
-  diagrams?: { title: string; image: string; alt: string; width: number; height: number }[];
+  diagrams?: { title: string; image: string; alt: string; width: number; height: number; mermaid: string }[];
   /** Year (e.g. 2024) for ordering: recent first when listing projects */
   year?: number;
   /** Month 1–12 for ordering within the same year */

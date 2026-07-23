@@ -20,7 +20,7 @@ const categories = Array.from(new Set(projectsByRecent.flatMap((p) => p.categori
       </p>
 
       <div id="filter-tabs" class="mb-4 flex flex-wrap gap-2" aria-label="Filter projects by category">
-        <button type="button" class="project-filter-tab px-4 py-2 rounded-md text-sm font-medium bg-[var(--color-primary)] text-white" data-filter="all" aria-pressed="true">
+        <button type="button" class="project-filter-tab px-4 py-2 rounded-md text-sm font-medium bg-[var(--color-primary)] text-white dark:text-slate-950" data-filter="all" aria-pressed="true">
           All
         </button>
         {categories.map((cat) => (
@@ -96,12 +96,12 @@ const categories = Array.from(new Set(projectsByRecent.flatMap((p) => p.categori
 
   function setActiveTab(active: Element) {
     tabs.forEach((tab) => {
-      tab.classList.remove('bg-[var(--color-primary)]', 'text-white');
+      tab.classList.remove('bg-[var(--color-primary)]', 'text-white', 'dark:text-slate-950');
       tab.classList.add('border-2', 'border-[var(--color-primary)]', 'text-[var(--color-primary)]');
       tab.setAttribute('aria-pressed', 'false');
     });
     active.classList.remove('border-2', 'border-[var(--color-primary)]', 'text-[var(--color-primary)]');
-    active.classList.add('bg-[var(--color-primary)]', 'text-white');
+    active.classList.add('bg-[var(--color-primary)]', 'text-white', 'dark:text-slate-950');
     active.setAttribute('aria-pressed', 'true');
   }
 
