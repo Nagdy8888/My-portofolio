@@ -80,7 +80,8 @@ function toSentences(text: string): string[] {
             <button
               type="button"
               class="screenshot-card"
-              data-screenshot-src={src}
+              data-lightbox-src={src}
+              data-lightbox-alt={project.screenshotAlts?.[i] ?? `${project.title} screenshot ${i + 1}`}
               aria-label={`Open ${project.screenshotAlts?.[i] ?? `${project.title} screenshot ${i + 1}`} full size`}
             >
               <img
@@ -108,26 +109,26 @@ function toSentences(text: string): string[] {
         </div>
       ) : null}
 
-      <div id="screenshot-lightbox" class="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Screenshot full size" tabindex="-1" hidden>
+      <div id="screenshot-lightbox" class="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Project visual full size" tabindex="-1" hidden>
         <button type="button" class="screenshot-lightbox-backdrop" aria-label="Close"></button>
         <div class="screenshot-lightbox-content">
-          <img id="screenshot-lightbox-img" src="" alt="Screenshot full size" />
+          <img id="screenshot-lightbox-img" src="" alt="Project visual full size" />
           <button type="button" class="screenshot-lightbox-close" aria-label="Close">&times;</button>
         </div>
       </div>
 
       <script>
-        const gallery = document.getElementById('screenshot-gallery');
         const lightbox = document.getElementById('screenshot-lightbox');
         const lightboxImg = document.getElementById('screenshot-lightbox-img');
         const backdrop = lightbox?.querySelector('.screenshot-lightbox-backdrop');
         const closeBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-lightbox-close');
         let screenshotTrigger: HTMLElement | null = null;
 
-        function openLightbox(src: string, trigger: HTMLElement) {
+        function openLightbox(src: string, alt: string, trigger: HTMLElement) {
           if (!lightbox || !lightboxImg) return;
           screenshotTrigger = trigger;
           lightboxImg.setAttribute('src', src);
+          lightboxImg.setAttribute('alt', alt);
           lightbox.removeAttribute('hidden');
           document.body.style.overflow = 'hidden';
           closeBtn?.focus();
@@ -141,10 +142,11 @@ function toSentences(text: string): string[] {
           screenshotTrigger = null;
         }
 
-        gallery?.querySelectorAll('.screenshot-card[data-screenshot-src]').forEach((card) => {
+        document.querySelectorAll<HTMLElement>('[data-lightbox-src]').forEach((card) => {
           card.addEventListener('click', () => {
-            const src = card.getAttribute('data-screenshot-src');
-            if (src) openLightbox(src, card as HTMLElement);
+            const src = card.getAttribute('data-lightbox-src');
+            const alt = card.getAttribute('data-lightbox-alt') ?? 'Project visual';
+            if (src) openLightbox(src, alt, card);
           });
         });
 
@@ -239,15 +241,19 @@ function toSentences(text: string): string[] {
       {project.diagrams && project.diagrams.length > 0 && (
         <section class="mb-8" aria-labelledby="diagrams-heading">
           <h2 id="diagrams-heading" class="text-xl font-semibold text-[var(--color-text)] mb-4">Architecture &amp; Flows</h2>
+          <p class="mb-5 leading-relaxed text-[var(--color-text-light)]">
+            The system connects Next.js clients to FastAPI, a LangGraph tagging pipeline,
+            OpenAI GPT-4o, and Supabase PostgreSQL.
+          </p>
           <div class="space-y-8">
             {project.diagrams.map((diagram) => (
               <figure>
                 <h3 class="mb-3 text-lg font-medium text-[var(--color-text)]">{diagram.title}</h3>
-                <a
-                  href={diagram.image}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="block overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-alt)]"
+                <button
+                  type="button"
+                  data-lightbox-src={diagram.image}
+                  data-lightbox-alt={diagram.alt}
+                  class="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-alt)] p-0 text-left transition-colors hover:border-[var(--color-primary)]"
                   aria-label={`Open ${diagram.title} diagram full size`}
                 >
                   <img
@@ -259,8 +265,10 @@ function toSentences(text: string): string[] {
                     decoding="async"
                     class="h-auto w-full"
                   />
-                </a>
-                <figcaption class="mt-2 text-sm text-[var(--color-text-light)]">Open the diagram for a full-size view.</figcaption>
+                </button>
+                <figcaption class="mt-2 text-sm text-[var(--color-text-light)]">
+                  Select the architecture diagram to inspect it full size.
+                </figcaption>
               </figure>
             ))}
           </div>
