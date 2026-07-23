@@ -68,6 +68,12 @@ function toSentences(text: string): string[] {
         </section>
       )}
 
+      {project.availabilityNote && (
+        <aside class="mb-8 rounded-md border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
+          <strong>Live demo availability:</strong> {project.availabilityNote}
+        </aside>
+      )}
+
       <div class="flex flex-wrap gap-2 mb-6">
         {project.tags.map((tag) => (
           <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
@@ -209,11 +215,12 @@ function toSentences(text: string): string[] {
           screenshotTrigger = null;
         }
 
-        document.querySelectorAll<HTMLElement>('[data-lightbox-src]').forEach((card) => {
+        document.querySelectorAll<HTMLElement>('[data-lightbox-src], [data-lightbox-diagram]').forEach((card) => {
           card.addEventListener('click', () => {
             const src = card.getAttribute('data-lightbox-src');
             const alt = card.getAttribute('data-lightbox-alt') ?? 'Project visual';
-            if (src) openLightbox(src, alt, card);
+            const renderedDiagram = card.querySelector('[data-mermaid-diagram] svg');
+            if (src || renderedDiagram) openLightbox(src ?? '', alt, card);
           });
         });
 
@@ -362,21 +369,28 @@ function toSentences(text: string): string[] {
                 <button
                   type="button"
                   data-lightbox-src={diagram.image}
+                  data-lightbox-diagram
                   data-lightbox-alt={diagram.alt}
                   class="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-alt)] p-0 text-left transition-colors hover:border-[var(--color-primary)]"
                   aria-label={`Open ${diagram.title} diagram full size`}
                 >
                   <div class="mermaid-diagram" data-mermaid-diagram role="img" aria-label={diagram.alt}>
                     <script is:inline type="application/json" set:html={JSON.stringify(diagram.mermaid).replace(/<\/script>/gi, '<\\/script>')} />
-                    <img
-                      src={diagram.image}
-                      alt={diagram.alt}
-                      width={diagram.width}
-                      height={diagram.height}
-                      loading="lazy"
-                      decoding="async"
-                      class="h-auto w-full"
-                    />
+                    {diagram.image ? (
+                      <img
+                        src={diagram.image}
+                        alt={diagram.alt}
+                        width={diagram.width ?? 1600}
+                        height={diagram.height ?? 900}
+                        loading="lazy"
+                        decoding="async"
+                        class="h-auto w-full"
+                      />
+                    ) : (
+                      <p class="flex min-h-72 items-center justify-center p-6 text-center text-sm text-[var(--color-text-light)]">
+                        Rendering interactive architecture diagram…
+                      </p>
+                    )}
                   </div>
                 </button>
                 <figcaption class="mt-2 text-sm text-[var(--color-text-light)]">

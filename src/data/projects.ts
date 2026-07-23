@@ -1,4 +1,5 @@
 import { imageAnalysisAgentDiagrams } from "./imageAnalysisAgentDiagrams";
+import { reelMovieAgentDiagrams } from "./reelMovieAgentDiagrams";
 
 export type ProjectCategory =
   | "Machine Learning"
@@ -25,6 +26,7 @@ export interface Project {
   liveUrl?: string;
   categories: ProjectCategory[];
   keyResult?: string;
+  availabilityNote?: string;
   dateLabel?: string;
   role?: string;
   scope?: string;
@@ -39,7 +41,14 @@ export interface Project {
   imageHeight?: number;
   screenshots?: string[];
   screenshotAlts?: string[];
-  diagrams?: { title: string; image: string; alt: string; width: number; height: number; mermaid: string }[];
+  diagrams?: readonly {
+    title: string;
+    alt: string;
+    mermaid: string;
+    image?: string;
+    width?: number;
+    height?: number;
+  }[];
   /** Year (e.g. 2024) for ordering: recent first when listing projects */
   year?: number;
   /** Month 1–12 for ordering within the same year */
@@ -86,7 +95,7 @@ export const projects: Project[] = [
     fullDescription: "Developed an ML-based anomaly detection system for a multiphase air-water flow facility using 29 sensor variables. Performed data cleaning, feature engineering, and model comparison to identify normal vs abnormal operation and classify two fault types (air leakage and air blockage), improving detection accuracy.",
     tags: ["Python", "Classification", "Feature Engineering", "Anomaly Detection"],
     featured: true,
-    featuredRank: 3,
+    featuredRank: 4,
     categories: ["Machine Learning"],
     keyResult: "Classified 2 fault types across 29 sensors",
     dateLabel: "July 2024",
@@ -129,8 +138,7 @@ export const projects: Project[] = [
     shortDescription: "Multi-class model predicting electricity load levels for 35k+ steel production cycles.",
     fullDescription: "Developed a multi-class classification model to predict electricity load levels (Light, Medium, Maximum) for 35k+ steel production cycles using historical consumption data, time-based features, grid measurements, and power factor indicators. Performed feature engineering on timestamp variables, reactive power metrics, and usage patterns to improve predictive accuracy.",
     tags: ["Python", "Classification", "Time-Series", "Energy Optimization"],
-    featured: true,
-    featuredRank: 4,
+    featured: false,
     categories: ["Machine Learning"],
     keyResult: "Predicted load levels for 35k+ production cycles",
     dateLabel: "November 2024",
@@ -202,7 +210,7 @@ export const projects: Project[] = [
     fullDescription: "Developed an end-to-end Retrieval-Augmented Generation (RAG) AI workflow with a chat interface in n8n. Integrated Google Drive file ingestion, preprocessing (CSV, Excel, text), and automated embedding storage into a vector database (Supabase). Built tools for seamless file uploads, database updates, and AI-driven query handling. This solution enables efficient knowledge retrieval, real-time document search, and intelligent automation for scalable AI applications.",
     tags: ["RAG", "Vector Database", "Data Integration", "n8n", "OpenAI API"],
     featured: true,
-    featuredRank: 2,
+    featuredRank: 3,
     categories: ["n8n", "AI Agent"],
     keyResult: "Real-time document search and AI-driven answers over ingested Drive files",
     dateLabel: "August 2025",
@@ -221,13 +229,51 @@ export const projects: Project[] = [
     month: 8,
   },
   {
+    slug: "reel-movie-agent",
+    title: "Reel — GraphRAG Movie Assistant",
+    shortDescription: "Grounded movie Q&A and recommendations with stable citations, streamed responses, and an interactive Movie–Person–Genre graph.",
+    fullDescription: "Reel is a full-stack GraphRAG movie assistant. Authenticated users ask natural-language questions, receive streamed answers grounded in a CMU MovieSummaries subset, inspect stable citations and source cards, and explore related movies, people, and genres in an interactive knowledge graph.",
+    tags: ["GraphRAG", "LangGraph", "LightRAG", "FastAPI", "Next.js", "Supabase", "PostgreSQL", "pgvector", "Apache AGE", "SSE", "Docker", "AWS", "Vercel"],
+    featured: true,
+    featuredRank: 1,
+    categories: ["AI Agent"],
+    github: "https://github.com/Nagdy8888/reel-movie-agent",
+    liveUrl: "https://reel-frontend-six.vercel.app/",
+    keyResult: "Grounded movie answers with validated citations and an interactive knowledge graph",
+    availabilityNote: "The Vercel frontend may remain online while the self-hosted AWS backend is paused. Chat, authentication-dependent data, and graph features can therefore be temporarily unavailable.",
+    dateLabel: "July 2026",
+    role: "Full-stack AI and GraphRAG system development",
+    scope: "Authenticated movie Q&A, recommendations, citations, chat history, and Movie–Person–Genre graph exploration",
+    metrics: [
+      { label: "Agent nodes", value: "4" },
+      { label: "Retrieval modes", value: "2" },
+    ],
+    problem: "Movie discovery often requires combining structured facts, fuzzy plot or theme matching, and trustworthy citations. Keyword search alone cannot answer relationship-heavy questions or show how movies, people, and genres connect.",
+    approach: "Built a Next.js 16 frontend on Vercel and a FastAPI backend on AWS EC2, with the LangGraph agent compiled in-process. Designed a deterministic acyclic graph that routes chitchat directly and sends factual or recommendation questions through LightRAG local and hybrid retrieval. Added Supabase JWT authentication, ownership-scoped chat persistence, PostgreSQL checkpoints, stable citation validation, SSE token streaming, and a Sigma WebGL knowledge graph. Kept retrieval context-only so the language model never writes SQL, Cypher, or graph queries.",
+    results: "Delivers streamed movie answers with validated source citations and focused knowledge-graph data. Supports authenticated chat history, full graph exploration, deterministic routing, fail-closed grounding, rate limits, structured logging, and production deployment across Vercel, AWS EC2, Supabase, and GHCR.",
+    tools: ["Next.js 16", "React 19", "TypeScript", "FastAPI", "LangGraph", "LightRAG", "OpenAI", "Supabase", "PostgreSQL", "Apache AGE", "pgvector", "Sigma.js", "Docker", "Caddy", "AWS EC2", "Vercel", "LangSmith"],
+    image: "/images/projects/reel-movie-agent/landing.webp",
+    imageAlt: "Reel dark landing page with the headline Ask anything about movies and start chatting controls",
+    imageWidth: 1440,
+    imageHeight: 1000,
+    screenshots: [
+      "/images/projects/reel-movie-agent/landing.webp",
+    ],
+    screenshotAlts: [
+      "Reel landing page introducing the GraphRAG movie assistant",
+    ],
+    diagrams: reelMovieAgentDiagrams,
+    year: 2026,
+    month: 7,
+  },
+  {
     slug: "image-analysis-agent",
     title: "Image Analysis Agent",
     shortDescription: "AI-powered product image tagging with LangGraph, GPT-4o vision, 8 parallel taggers, and search over structured tags in Supabase.",
     fullDescription: "AI-powered image tagging for product imagery. Upload images, get structured tags (season, theme, colors, objects, and more) via LangGraph and OpenAI GPT-4o, store results in Supabase, and search or browse them in a modern web UI. Full-stack agent with single and bulk upload, real-time analysis, and cascading filter search.",
     tags: ["LangGraph", "GPT-4o", "FastAPI", "Next.js", "React", "TypeScript", "Supabase", "PostgreSQL", "LangChain", "Pydantic", "Docker", "Tailwind CSS", "shadcn/ui", "AI Agent", "Computer Vision", "Prompt Engineering"],
     featured: true,
-    featuredRank: 1,
+    featuredRank: 2,
     categories: ["AI Agent"],
     github: "https://github.com/Nagdy8888/image-analysis-agent",
     keyResult: "Structured tags across 8 categories with confidence scores, parallel taggers, and AND search",
