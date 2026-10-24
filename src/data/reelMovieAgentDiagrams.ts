@@ -48,6 +48,10 @@ export const reelMovieAgentDiagrams = [
   },
   {
     title: 'Deterministic Agent Workflow',
+    image: '/images/projects/reel-movie-agent/agent-workflow.svg',
+    width: 280,
+    height: 388,
+    description: 'The LangGraph router separates conversational requests from factual questions and recommendations. Grounded requests retrieve evidence before generating a response.',
     alt: 'A deterministic LangGraph route chooses chitchat or grounded retrieval before generating the final streamed response',
     mermaid: `stateDiagram-v2
   [*] --> route
@@ -59,6 +63,10 @@ export const reelMovieAgentDiagrams = [
   },
   {
     title: 'Chat Request Lifecycle',
+    image: '/images/projects/reel-movie-agent/chat-lifecycle.svg',
+    width: 1581,
+    height: 1303,
+    description: 'Follow a chat request through authentication, conversation ownership, agent routing, retrieval, generation, and streamed events. On a small screen, scroll the diagram horizontally to read the interactions.',
     alt: 'Sequence from the Next.js frontend through FastAPI, Supabase, LangGraph, LightRAG, and OpenAI to a streamed cited answer',
     mermaid: `sequenceDiagram
   autonumber

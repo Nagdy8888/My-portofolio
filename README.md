@@ -1,131 +1,50 @@
-# Mustafa Alnagdy — Portfolio
+﻿# Mustafa Alnagdy — Portfolio
 
-Personal portfolio site for **Mustafa Abdel-Rahman Alnagdy**, focused on data science,
-AI agents, and machine learning for industrial and process-system data.
+An Astro portfolio for AI engineering clients and employers. The engineering showcase uses real project interfaces, focused case studies, and career information from the supplied October 2026 CV.
 
-## Tech stack
+## Run locally
 
-- **Astro 5** — static site, file-based routing
-- **Tailwind CSS v4** — styling via `@tailwindcss/vite`
-- **TypeScript** — project data and types
-- **Mermaid + SVG fallback** — interactive architecture rendered only on diagram pages
-- **Astro Sitemap** — enabled when `SITE_URL` is configured
+- `npm install` installs dependencies.
+- `npm run dev` starts the site at http://localhost:4321.
+- `npm run verify` runs Astro/TypeScript diagnostics, validates asset paths, and builds the static site.
+- `npm run preview` serves the production build.
+- `npm run qa:local` crawls local project routes and assets. Set `QA_ORIGIN` to test another local port.
 
-## Project structure
+## Structure
 
-```text
-src/
-├── components/       # Layout and section components
-│   ├── Navbar.astro
-│   ├── Hero.astro
-│   ├── About.astro
-│   ├── Highlights.astro
-│   ├── Experience.astro
-│   ├── Projects.astro    # Featured projects (home)
-│   ├── Skills.astro
-│   ├── Education.astro
-│   ├── Contact.astro
-│   └── Footer.astro
-├── data/
-│   └── projects.ts       # Single source of truth for all projects
-├── layouts/
-│   └── Layout.astro
-├── pages/
-│   ├── index.astro       # Home (one-page sections)
-│   ├── robots.txt.ts     # Environment-aware robots response
-│   └── projects/
-│       ├── index.astro  # All projects + category filter
-│       └── [slug].astro # Project detail (Problem / Approach / Results)
-└── styles/
-    └── global.css       # Tailwind + theme + animations
+- `src/pages/index.astro`: homepage, selected work, background, practice, experience, education, and contact.
+- `src/pages/projects/index.astro`: project archive; category filtering is reflected in the URL and browser history.
+- `src/pages/projects/[slug].astro`: case studies, screenshot galleries, native dialog viewer, related work, and architecture diagrams.
+- `src/data/projects.ts`: typed project content shared by the archive and detail routes.
+- `src/components/Navbar.astro` and `Footer.astro`: shared navigation and footer.
+- `src/layouts/Layout.astro`: metadata, structured data, persistent theme, and skip navigation.
+- `src/styles/global.css`: shared responsive design system.
+- `public/fonts`: self-hosted variable Manrope, with its OFL license.
 
-public/
-├── images/              # Optimized portrait, logos, and real project visuals
-├── Mustafa-Alnagdy-CV.pdf
-├── favicon.svg
-└── favicon.ico
+`PRODUCT.md` records product truth. `DESIGN.md` records the implemented visual system. `.impeccable/home-brief.md` records the confirmed design direction. Browser verification captures are in `.impeccable/review/`.
 
-scripts/
-└── validate-content.mjs # Checks public asset paths and casing
-```
+## Content and evidence
 
-## Commands
+`public/Mustafa-Alnagdy-CV.pdf` is copied from the newest supplied `Mustafa_CV.pdf`. Older CV source files remain intact.
 
-| Command           | Action                                      |
-| ----------------- | ------------------------------------------- |
-| `npm install`     | Install dependencies                        |
-| `npm run dev`     | Start dev server at `http://localhost:4321` |
-| `npm run build`   | Build for production to `./dist/`            |
-| `npm run preview` | Preview the production build locally        |
-| `npm run check`   | Run Astro and TypeScript diagnostics         |
-| `npm run validate:content` | Validate referenced public assets |
-| `npm run qa:local` | Crawl local routes and assets while dev server runs |
-| `npm run verify`  | Run checks, content validation, and build    |
+Smart RAG is in final development and evaluation. Its case study describes capabilities checked against the local project README and implementation. It makes no accuracy or production-readiness claim. Three actual browser captures from the running local app on 23 October 2026 show:
 
-## Adding a project
+- `public/images/projects/smart-rag/ask.jpg`: a restored conversation displaying a document-derived comparison table.
+- `public/images/projects/smart-rag/citation-page.jpg`: an original PDF citation page with highlighted evidence.
+- `public/images/projects/smart-rag/figure.jpg`: an extracted original figure opened in the diagram viewer.
 
-Edit **`src/data/projects.ts`** and add an object to the `projects` array:
+The displayed PDF and figure are source material from *Building Applications with AI Agents*. They demonstrate the app's handling of documents; authorship of that source material is not claimed. JPEG metadata and asset sidecars retain screenshot and pre-existing-asset provenance. No synthetic product screenshots ship.
 
-```typescript
-{
-  slug: "my-project",
-  title: "My Project Title",
-  shortDescription: "One sentence for cards.",
-  fullDescription: "Full paragraph for the detail page.",
-  tags: ["Python", "ML"],
-  featured: true,
-  featuredRank: 3,
-  categories: ["Machine Learning"],
-  keyResult: "Optional one-line result",
-  dateLabel: "July 2026",
-  role: "Your role",
-  scope: "Dataset or system scope",
-  metrics: [
-    { label: "Verified metric", value: "Measured value" },
-  ],
-  problem: "Optional",
-  approach: "Optional",
-  results: "Optional",
-  tools: ["Python", "Pandas"],
-  image: "/images/projects/my-project.webp",
-  imageAlt: "Describe what the project image shows",
-  imageWidth: 1600,
-  imageHeight: 900,
-  github: "https://github.com/...",
-  liveUrl: "https://...",
-}
-```
+## Deployment
 
-- The project appears on **/projects** and gets a detail page at **/projects/my-project**.
-- If `featured: true`, it also appears in the Featured Projects section on the home page.
-- Keep only 3–4 projects featured and assign their order with `featuredRank`.
-- Omit unavailable links and metrics. Do not publish placeholders or estimated performance.
+Build output is `dist/`. Set `SITE_URL` to the actual public portfolio URL in the hosting environment to enable canonical URLs, social image URLs, and the sitemap. This redesign has been verified locally; publishing is a separate action.
 
-## Theme and design
+## Smart RAG architecture diagrams
 
-- Industrial-AI positioning with a focused gradient hero, light/dark themes, and blue accents.
-- Design tokens and category badge colors live in `src/styles/global.css`.
-- Scroll animations use `animate-on-scroll` and a no-JS fallback (`.no-js`).
-- Keyboard focus, reduced motion, and dialog focus management are included.
+`src/data/smartRagDiagrams.ts` contains three Mermaid flowcharts: the application architecture, the company-document answer workflow, and the knowledge-graph source/evidence flow. Their explanations distinguish graph relationships from canonical document evidence. The case study displays pre-rendered SVGs in the portfolio palette and provides expandable Mermaid source. Narrow screens can scroll each diagram using keyboard or touch.
 
-## Production metadata
+## Diagram validation and regeneration
 
-Set the canonical production origin before building:
+`npm run verify` parses all seven Mermaid sources and checks their generated SVGs, source hashes, and dimensions. `npm run diagrams:render` regenerates diagrams for Smart RAG, Reel, and Image Analysis; `diagrams:reel` remains an alias. All diagrams ship as static images and work without client-side Mermaid or JavaScript. The renderer uses installed Chrome/Edge on Windows; set `MERMAID_BROWSER_PATH` to select another installed Chromium executable. Source remains expandable on each case-study page.
 
-```bash
-SITE_URL=https://your-domain.example
-```
-
-Use `.env.example` as the deployment reference. Without `SITE_URL`, the site still builds,
-but canonical URLs and sitemap generation are intentionally omitted.
-
-See `CONTENT_CHECKLIST.md` for facts and evidence that still require verification.
-
-## Requirements
-
-- **Node.js** 18+ (e.g. v22.x)
-- **npm** 9+
-
-## License
-
-Private portfolio. All rights reserved.
+The October 24 refinement tightens section spacing, moves the CV action beside the main action, removes supporting screenshot sleeves, and increases metadata readability. The approved navy/mint engineering-editorial theme uses unframed product imagery, ruled project articles, and mint caption and contact accents.

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Mustafa Alnagdy monogram">
-  <rect width="128" height="128" rx="28" fill="#1e3a5f"/>
+  <rect width="128" height="128" rx="28" fill="#17313e"/>
   <path d="M27 91 40 35h15l9 27 9-27h15l13 56H86l-7-35-10 29H58L48 56l-7 35H27Z" fill="#fff"/>
-  <circle cx="96" cy="32" r="9" fill="#38bdf8"/>
+  <circle cx="96" cy="32" r="9" fill="#c4ecd7"/>
 </svg>

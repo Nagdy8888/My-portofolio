@@ -2,438 +2,54 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import { projects, categoryToBadgeClass } from '../../data/projects';
-
-export function getStaticPaths() {
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
-  }));
-}
-
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import { projects } from '../../data/projects';
+import { dimensionsFor } from '../../data/imageDimensions';
+export function getStaticPaths() { return projects.map(project => ({params:{slug:project.slug},props:{project}})); }
 const { project } = Astro.props;
-const hasStructuredContent = project.problem || project.approach || project.results;
-
-function toSentences(text: string): string[] {
-  return text
-    .split(/(?<=\.)\s+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0);
-}
+const related = projects.filter(p => p.slug !== project.slug && p.image).slice(0,2);
+const isRag = project.slug === 'smart-rag';
 ---
+<Layout title={`${project.title} | Mustafa Alnagdy`} description={project.shortDescription} image={project.image} imageAlt={project.imageAlt} type="article"><Navbar /><main id="main-content" class="case-main"><div class="wrap"><a href="/projects" class="back-link"> All projects</a><div class="case-heading"><div><h1>{project.title}</h1><p>{project.shortDescription}</p></div><div class="case-facts"><div><span>Discipline</span><strong>{project.categories.join(' / ')}</strong></div><div><span>My role</span><strong>{project.role ?? 'Design & development'}</strong></div><div><span>Timeline</span><strong>{project.dateLabel ?? project.year}</strong></div><div><span>Focus</span><strong>{project.scope ?? project.categories.join(', ')}</strong></div></div></div><div class="inline-tags case-tags">{project.tags.slice(0, 6).map(tag => <span>{tag}</span>)}</div>
+{project.image && <a class="case-cover gallery-trigger" href={project.image} data-image={project.image} data-width={dimensionsFor(project.image).width} data-height={dimensionsFor(project.image).height} data-alt={project.imageAlt ?? project.title} aria-label={`Enlarge ${project.title} screenshot`}><img src={project.image} alt={project.imageAlt ?? project.title} width={dimensionsFor(project.image).width} height={dimensionsFor(project.image).height} loading="eager" /><span class="enlarge-label">View full size </span></a>}
+<div class="case-body"><aside class="case-outline" aria-label="Case study sections"><a href="#overview">Overview</a><a href="#challenge">The challenge</a><a href="#approach">The approach</a><a href="#outcome">The outcome</a>{project.screenshots && <a href="#gallery">In the product</a>}{project.diagrams?.length ? <a href="#architecture">Architecture</a> : null}</aside><div class="case-prose"><section id="overview"><h2>The idea behind it.</h2><p>{project.fullDescription}</p></section><section id="challenge"><h2>The challenge</h2><p>{project.problem ?? project.shortDescription}</p></section><section id="approach"><h2>The approach</h2><p>{project.approach ?? project.fullDescription}</p>{isRag && <div class="rag-flow" aria-label="Document answer pipeline"><div><strong>Retrieve</strong><span>Semantic + keyword + exact terms</span></div><div><strong>Ground</strong><span>Authorized passages + verification</span></div><div><strong>Inspect</strong><span>Answer + original PDF evidence</span></div></div>}</section><section id="outcome"><h2>What it delivers</h2><p>{project.results ?? project.keyResult ?? project.fullDescription}</p>{project.metrics && <dl class="case-metrics">{project.metrics.map(metric => <div><dt>{metric.label}</dt><dd>{metric.value}</dd></div>)}</dl>}{isRag && <div class="case-note"><strong>Current status</strong><p>In final development and evaluation. Screenshots are from the running local application. Final release acceptance is still in progress.</p></div>}</section><section id="tools"><h2>Built with</h2><div class="inline-tags">{(project.tools ?? project.tags).map(tool => <span>{tool}</span>)}</div></section>{(project.github || project.liveUrl) && <div class="case-links">{project.github && <a class="button button-dark" href={project.github} target="_blank" rel="noopener noreferrer">View source </a>}{project.liveUrl && <a class="text-link" href={project.liveUrl} target="_blank" rel="noopener noreferrer">Open live demo </a>}</div>}{project.availabilityNote && <p class="case-note">{project.availabilityNote}</p>}</div></div>
+{project.screenshots && <section id="gallery" class="case-gallery"><div class="section-heading"><h2>Inside the product.</h2><p>Real interfaces. Click to take a closer look.</p></div>{project.screenshots.map((src,index) => <figure><a class="gallery-trigger" href={src} data-image={src} data-width={dimensionsFor(src).width} data-height={dimensionsFor(src).height} data-alt={project.screenshotAlts?.[index] ?? project.title} aria-label={`Enlarge ${project.screenshotAlts?.[index] ?? project.title}`}><img src={src} alt={project.screenshotAlts?.[index] ?? project.title} width={dimensionsFor(src).width} height={dimensionsFor(src).height} loading="lazy" /><span class="enlarge-label">View full size </span></a><figcaption>{project.screenshotAlts?.[index] ?? `${project.title} — product interface`}</figcaption></figure>)}</section>}
+{project.diagrams && project.diagrams.length > 0 && <section id="architecture" class="case-gallery architecture-section"><div class="section-heading"><h2>How it fits together.</h2><p>The system, the answer flow, and the evidence behind it.</p></div>{project.diagrams.map((diagram, index) => <ArchitectureDiagram diagram={diagram} index={index} />)}</section>}
 
-<Layout
-  title={`${project.title} | Mustafa Alnagdy`}
-  description={project.shortDescription}
-  image={project.image}
-  imageAlt={project.imageAlt}
-  type="article"
->
-  <Navbar />
-  <main id="main-content" class="py-16 md:py-20 bg-[var(--color-bg)]">
-    <div class="max-w-[800px] mx-auto px-6">
-      <a href="/projects" class="text-sm text-[var(--color-primary)] hover:underline mb-6 inline-block">&larr; Back to All Projects</a>
-
-      <div class="flex flex-wrap gap-1.5 mb-4">
-        {project.categories.map((cat) => (
-          <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${categoryToBadgeClass(cat)}`}>{cat}</span>
-        ))}
-      </div>
-      <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-4">{project.title}</h1>
-      {(project.dateLabel || project.role) && (
-        <p class="mb-5 text-sm text-[var(--color-text-light)]">
-          {[project.role, project.dateLabel].filter(Boolean).join(' · ')}
-        </p>
-      )}
-      <p class="mb-6 text-lg leading-relaxed text-[var(--color-text-light)]">{project.fullDescription}</p>
-
-      {(project.scope || (project.metrics && project.metrics.length > 0)) && (
-        <section class="mb-8 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-alt)] p-5" aria-label="Project overview">
-          {project.scope && (
-            <div class="mb-4">
-              <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-light)]">Scope</p>
-              <p class="mt-1 text-sm font-medium text-[var(--color-text)]">{project.scope}</p>
-            </div>
-          )}
-          {project.metrics && project.metrics.length > 0 && (
-            <dl class="grid gap-4 sm:grid-cols-2">
-              {project.metrics.map((metric) => (
-                <div>
-                  <dt class="text-xs text-[var(--color-text-light)]">{metric.label}</dt>
-                  <dd class="mt-1 text-xl font-bold text-[var(--color-primary)]">{metric.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-        </section>
-      )}
-
-      {project.availabilityNote && (
-        <aside class="mb-8 rounded-md border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-950 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100">
-          <strong>Live demo availability:</strong> {project.availabilityNote}
-        </aside>
-      )}
-
-      <div class="flex flex-wrap gap-2 mb-6">
-        {project.tags.map((tag) => (
-          <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
-        ))}
-      </div>
-
-      {project.screenshots && project.screenshots.length > 0 ? (
-        <div class="screenshot-gallery mb-8" id="screenshot-gallery">
-          {project.screenshots.map((src, i) => (
-            <button
-              type="button"
-              class="screenshot-card"
-              data-lightbox-src={src}
-              data-lightbox-alt={project.screenshotAlts?.[i] ?? `${project.title} screenshot ${i + 1}`}
-              aria-label={`Open ${project.screenshotAlts?.[i] ?? `${project.title} screenshot ${i + 1}`} full size`}
-            >
-              <img
-                src={src}
-                alt={project.screenshotAlts?.[i] ?? `${project.title} screenshot ${i + 1}`}
-                width="1912"
-                height="977"
-                loading={i === 0 ? 'eager' : 'lazy'}
-                decoding="async"
-                class="w-full h-auto object-contain"
-              />
-            </button>
-          ))}
-        </div>
-      ) : project.image ? (
-        <div class="mb-8 rounded-md overflow-hidden border border-[var(--color-border)] shadow-md">
-          <img
-            src={project.image}
-            alt={project.imageAlt ?? `${project.title} project visual`}
-            width={project.imageWidth ?? 1200}
-            height={project.imageHeight ?? 675}
-            decoding="async"
-            class="w-full h-auto object-cover"
-          />
-        </div>
-      ) : null}
-
-      <div id="screenshot-lightbox" class="screenshot-lightbox" role="dialog" aria-modal="true" aria-label="Project visual full size" tabindex="-1" hidden>
-        <button type="button" class="screenshot-lightbox-backdrop" aria-label="Close"></button>
-        <div class="screenshot-lightbox-content">
-          <div class="screenshot-lightbox-toolbar">
-            <button type="button" class="screenshot-lightbox-zoom screenshot-zoom-out" aria-label="Zoom out">−</button>
-            <span class="screenshot-lightbox-scale" aria-live="polite">100%</span>
-            <button type="button" class="screenshot-lightbox-zoom screenshot-zoom-in" aria-label="Zoom in">+</button>
-            <button type="button" class="screenshot-lightbox-zoom screenshot-zoom-reset" aria-label="Reset zoom">Reset</button>
-            <button type="button" class="screenshot-lightbox-close" aria-label="Close">&times;</button>
-          </div>
-          <div class="screenshot-lightbox-viewport">
-            <img id="screenshot-lightbox-img" src="" alt="Project visual full size" />
-            <div id="screenshot-lightbox-svg" class="screenshot-lightbox-svg" role="img" hidden></div>
-          </div>
-        </div>
-      </div>
-
-      <script>
-        const lightbox = document.getElementById('screenshot-lightbox');
-        const lightboxImg = document.getElementById('screenshot-lightbox-img');
-        const lightboxSvg = document.getElementById('screenshot-lightbox-svg');
-        const backdrop = lightbox?.querySelector('.screenshot-lightbox-backdrop');
-        const closeBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-lightbox-close');
-        const zoomInBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-zoom-in');
-        const zoomOutBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-zoom-out');
-        const zoomResetBtn = lightbox?.querySelector<HTMLButtonElement>('.screenshot-zoom-reset');
-        const zoomScale = lightbox?.querySelector<HTMLElement>('.screenshot-lightbox-scale');
-        let screenshotTrigger: HTMLElement | null = null;
-        let zoomTarget: HTMLElement | SVGElement | null = null;
-        let zoom = 1;
-        const minZoom = 0.5;
-        const maxZoom = 4;
-        const zoomStep = 0.25;
-
-        function updateZoom() {
-          if (!zoomTarget) return;
-          zoomTarget.style.width = `${zoom * 100}%`;
-          zoomTarget.style.maxWidth = 'none';
-          zoomTarget.style.height = 'auto';
-          zoomScale && (zoomScale.textContent = `${Math.round(zoom * 100)}%`);
-          if (zoomInBtn) zoomInBtn.disabled = zoom >= maxZoom;
-          if (zoomOutBtn) zoomOutBtn.disabled = zoom <= minZoom;
-        }
-
-        function setZoom(nextZoom: number) {
-          zoom = Math.min(maxZoom, Math.max(minZoom, nextZoom));
-          updateZoom();
-        }
-
-        function openLightbox(src: string, alt: string, trigger: HTMLElement) {
-          if (
-            !lightbox ||
-            !(lightboxImg instanceof HTMLImageElement) ||
-            !(lightboxSvg instanceof HTMLElement)
-          ) return;
-
-          screenshotTrigger = trigger;
-          const renderedDiagram = trigger.querySelector<SVGSVGElement>('[data-mermaid-diagram] svg');
-
-          if (renderedDiagram) {
-            lightboxImg.hidden = true;
-            lightboxSvg.hidden = false;
-            lightboxSvg.setAttribute('aria-label', alt);
-            lightboxSvg.replaceChildren(renderedDiagram.cloneNode(true));
-            zoomTarget = lightboxSvg.querySelector<SVGSVGElement>('svg');
-          } else {
-            lightboxSvg.hidden = true;
-            lightboxSvg.replaceChildren();
-            lightboxImg.hidden = false;
-            lightboxImg.setAttribute('src', src);
-            lightboxImg.setAttribute('alt', alt);
-            zoomTarget = lightboxImg;
-          }
-
-          zoom = 1;
-          updateZoom();
-          lightbox.removeAttribute('hidden');
-          document.body.style.overflow = 'hidden';
-          closeBtn?.focus();
-        }
-
-        function closeLightbox() {
-          if (!lightbox) return;
-          lightbox.setAttribute('hidden', '');
-          document.body.style.overflow = '';
-          if (lightboxImg instanceof HTMLImageElement) {
-            lightboxImg.removeAttribute('src');
-            lightboxImg.style.removeProperty('width');
-            lightboxImg.style.removeProperty('max-width');
-          }
-          if (lightboxSvg instanceof HTMLElement) {
-            lightboxSvg.replaceChildren();
-            lightboxSvg.style.removeProperty('width');
-            lightboxSvg.style.removeProperty('max-width');
-          }
-          zoomTarget = null;
-          screenshotTrigger?.focus();
-          screenshotTrigger = null;
-        }
-
-        document.querySelectorAll<HTMLElement>('[data-lightbox-src], [data-lightbox-diagram]').forEach((card) => {
-          card.addEventListener('click', () => {
-            const src = card.getAttribute('data-lightbox-src');
-            const alt = card.getAttribute('data-lightbox-alt') ?? 'Project visual';
-            const renderedDiagram = card.querySelector('[data-mermaid-diagram] svg');
-            if (src || renderedDiagram) openLightbox(src ?? '', alt, card);
-          });
-        });
-
-        backdrop?.addEventListener('click', closeLightbox);
-        closeBtn?.addEventListener('click', closeLightbox);
-        zoomInBtn?.addEventListener('click', () => setZoom(zoom + zoomStep));
-        zoomOutBtn?.addEventListener('click', () => setZoom(zoom - zoomStep));
-        zoomResetBtn?.addEventListener('click', () => setZoom(1));
-
-        lightbox?.addEventListener('keydown', (e: KeyboardEvent) => {
-          if (e.key === 'Escape') closeLightbox();
-          if (e.key === '+' || e.key === '=') {
-            e.preventDefault();
-            setZoom(zoom + zoomStep);
-          }
-          if (e.key === '-') {
-            e.preventDefault();
-            setZoom(zoom - zoomStep);
-          }
-          if (e.key === '0') {
-            e.preventDefault();
-            setZoom(1);
-          }
-          if (e.key !== 'Tab' || !lightbox) return;
-          const focusable = Array.from(
-            lightbox.querySelectorAll<HTMLElement>('button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')
-          );
-          if (focusable.length === 0) return;
-          const first = focusable[0];
-          const last = focusable[focusable.length - 1];
-          if (e.shiftKey && document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          } else if (!e.shiftKey && document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        });
-
-        async function renderMermaidDiagrams() {
-          const containers = document.querySelectorAll<HTMLElement>('[data-mermaid-diagram]');
-          if (containers.length === 0) return;
-
-          try {
-            const { default: mermaid } = await import('mermaid');
-            mermaid.initialize({
-              startOnLoad: false,
-              securityLevel: 'strict',
-              theme: document.documentElement.classList.contains('dark') ? 'dark' : 'neutral',
-            });
-
-            for (const [index, container] of Array.from(containers).entries()) {
-              const data = container.querySelector('script[type="application/json"]');
-              if (!data?.textContent) continue;
-              const definition = JSON.parse(data.textContent);
-              if (typeof definition !== 'string') continue;
-              const id = `portfolio-mermaid-${index}-${Math.random().toString(36).slice(2, 8)}`;
-              const { svg } = await mermaid.render(id, definition);
-              container.innerHTML = svg;
-            }
-          } catch (error) {
-            console.warn('Mermaid diagram rendering failed; showing the static fallback.', error);
-          }
-        }
-
-        renderMermaidDiagrams();
-      </script>
-
-      {hasStructuredContent ? (
-        <div class="space-y-8 mb-8">
-          {project.problem && (
-            <section>
-              <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">The Problem</h2>
-              {toSentences(project.problem).length > 1 ? (
-                <ul class="project-bullets">
-                  {toSentences(project.problem).map((s) => (
-                    <li>{s}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.problem}</p>
-              )}
-            </section>
-          )}
-          {project.approach && (
-            <section>
-              <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">Approach</h2>
-              {toSentences(project.approach).length > 1 ? (
-                <div class="project-graph" role="img" aria-label="Approach steps as a flowchart">
-                  {toSentences(project.approach).map((s, i) => {
-                    const steps = toSentences(project.approach ?? '');
-                    return (
-                      <>
-                        <div class="graph-node">{s}</div>
-                        {i < steps.length - 1 ? <div class="graph-connector" aria-hidden="true" /> : null}
-                      </>
-                    );
-                  })}
-                </div>
-              ) : (
-                <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.approach}</p>
-              )}
-            </section>
-          )}
-          {project.results && (
-            <section>
-              <h2 class="text-xl font-semibold text-[var(--color-text)] mb-2">Results</h2>
-              {toSentences(project.results).length > 1 ? (
-                <ul class="project-checks">
-                  {toSentences(project.results).map((s) => (
-                    <li>{s}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p class="text-base leading-relaxed text-[var(--color-text-light)]">{project.results}</p>
-              )}
-              {project.keyResult && (
-                <div class="project-callout mt-4">
-                  <strong>Key result:</strong> {project.keyResult}
-                </div>
-              )}
-            </section>
-          )}
-        </div>
-      ) : (
-        <div class="mb-8">
-          {project.keyResult && (
-            <div class="project-callout mt-4">
-              <strong>Key result:</strong> {project.keyResult}
-            </div>
-          )}
-        </div>
-      )}
-
-      {project.diagrams && project.diagrams.length > 0 && (
-        <section class="mb-8" aria-labelledby="diagrams-heading">
-          <h2 id="diagrams-heading" class="text-xl font-semibold text-[var(--color-text)] mb-4">Architecture &amp; Flows</h2>
-          <p class="mb-5 leading-relaxed text-[var(--color-text-light)]">
-            The system connects Next.js clients to FastAPI, a LangGraph tagging pipeline,
-            OpenAI GPT-4o, and Supabase PostgreSQL.
-          </p>
-          <div class="space-y-8">
-            {project.diagrams.map((diagram) => (
-              <figure>
-                <h3 class="mb-3 text-lg font-medium text-[var(--color-text)]">{diagram.title}</h3>
-                <button
-                  type="button"
-                  data-lightbox-src={diagram.image}
-                  data-lightbox-diagram
-                  data-lightbox-alt={diagram.alt}
-                  class="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-alt)] p-0 text-left transition-colors hover:border-[var(--color-primary)]"
-                  aria-label={`Open ${diagram.title} diagram full size`}
-                >
-                  <div class="mermaid-diagram" data-mermaid-diagram role="img" aria-label={diagram.alt}>
-                    <script is:inline type="application/json" set:html={JSON.stringify(diagram.mermaid).replace(/<\/script>/gi, '<\\/script>')} />
-                    {diagram.image ? (
-                      <img
-                        src={diagram.image}
-                        alt={diagram.alt}
-                        width={diagram.width ?? 1600}
-                        height={diagram.height ?? 900}
-                        loading="lazy"
-                        decoding="async"
-                        class="h-auto w-full"
-                      />
-                    ) : (
-                      <p class="flex min-h-72 items-center justify-center p-6 text-center text-sm text-[var(--color-text-light)]">
-                        Rendering interactive architecture diagram…
-                      </p>
-                    )}
-                  </div>
-                </button>
-                <figcaption class="mt-2 text-sm text-[var(--color-text-light)]">
-                  Select the architecture diagram to inspect it full size.
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {project.tools && project.tools.length > 0 && (
-        <section class="mb-8">
-          <h2 class="text-xl font-semibold text-[var(--color-text)] mb-3">Tools Used</h2>
-          <div class="flex flex-wrap gap-2">
-            {project.tools.map((tool) => (
-              <span class="text-sm bg-[var(--color-bg-alt)] text-[var(--color-text-light)] px-3 py-1.5 rounded-md border border-[var(--color-border)]">{tool}</span>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <div class="flex flex-wrap gap-4">
-        {project.github && (
-          <a href={project.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-[var(--color-primary)] text-white dark:text-slate-950 px-5 py-2.5 rounded-md font-medium hover:bg-[var(--color-primary-hover)] transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            <span>View on GitHub</span>
-          </a>
-        )}
-        {project.liveUrl && (
-          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border-2 border-[var(--color-primary)] text-[var(--color-primary)] px-5 py-2.5 rounded-md font-medium hover:bg-[var(--color-primary)] hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
-            <span>Live Demo</span>
-          </a>
-        )}
-      </div>
-    </div>
-  </main>
-  <Footer />
+<section class="case-related"><div class="section-heading"><h2>Keep exploring.</h2><a class="text-link" href="/projects">All projects </a></div><div class="selected-grid">{related.map(item => <article><a class="selected-image" href={`/projects/${item.slug}`}><img src={item.image} alt={item.imageAlt ?? item.title} width="1200" height="675" loading="lazy" /></a><h3><a href={`/projects/${item.slug}`}>{item.title} </a></h3></article>)}</div></section>
+</div><div class="case-cta"><div class="wrap"><h2>Let’s build something useful.</h2><a class="button button-dark" href="mailto:mustafaalnagdy26@gmail.com">Get in touch </a></div></div></main><Footer />
+<dialog id="image-dialog" class="image-dialog" aria-label="Project screenshot viewer"><div class="dialog-toolbar"><span id="dialog-caption"></span><div class="dialog-actions"><button type="button" id="zoom-image-dialog" aria-pressed="false">Original size</button><a id="open-original-image" href={project.image ?? "/images/mustafa-alnagdy.webp"} target="_blank" rel="noopener noreferrer">Open original</a><button type="button" id="close-image-dialog" aria-label="Close screenshot viewer">Close</button></div></div><div class="dialog-image-canvas" tabindex="0" role="region" aria-label="Screenshot image; scroll to inspect when viewing original size"><img id="dialog-image" src={project.image ?? "/images/mustafa-alnagdy.webp"} alt={project.imageAlt ?? project.title} width={dimensionsFor(project.image ?? "/images/mustafa-alnagdy.webp").width} height={dimensionsFor(project.image ?? "/images/mustafa-alnagdy.webp").height} /></div></dialog>
 </Layout>
+<script>
+const dialog = document.querySelector<HTMLDialogElement>('#image-dialog');
+const image = document.querySelector<HTMLImageElement>('#dialog-image');
+const caption = document.getElementById('dialog-caption');
+let opener: HTMLElement | null = null;
+const zoom = document.querySelector<HTMLButtonElement>('#zoom-image-dialog');
+const original = document.querySelector<HTMLAnchorElement>('#open-original-image');
+function setOriginalSize(enabled: boolean) {
+  dialog?.classList.toggle('is-zoomed', enabled);
+  zoom?.setAttribute('aria-pressed', String(enabled));
+  if (zoom) zoom.textContent = enabled ? 'Fit to screen' : 'Original size';
+}
+document.querySelectorAll<HTMLAnchorElement>('.gallery-trigger').forEach(anchor => anchor.addEventListener('click', event => {
+  if (!dialog?.showModal || !image || !anchor.dataset.image) return;
+  // Preserve native open-in-new-tab gestures and non-JavaScript image access.
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+  event.preventDefault();
+  opener = anchor;
+  image.src = anchor.dataset.image;
+  image.alt = anchor.dataset.alt ?? '';
+  image.width = Number(anchor.dataset.width);
+  image.height = Number(anchor.dataset.height);
+  if (original) original.href = anchor.href;
+  if (caption) caption.textContent = image.alt;
+  setOriginalSize(false);
+  dialog.showModal();
+  document.body.style.overflow = 'hidden';
+}));
+zoom?.addEventListener('click', () => setOriginalSize(zoom.getAttribute('aria-pressed') !== 'true'));
+document.getElementById('close-image-dialog')?.addEventListener('click', () => dialog?.close());
+dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+dialog?.addEventListener('close', () => { document.body.style.overflow = ''; opener?.focus(); });
+</script>

@@ -1,0 +1,31 @@
+---
+import manifest from '../data/diagramAssets.json';
+import type { Project } from '../data/projects';
+
+interface Props {
+  diagram: NonNullable<Project['diagrams']>[number];
+  index: number;
+}
+const { diagram, index } = Astro.props;
+const assets: Record<string, { width: number; height: number; sourceHash: string }> = manifest;
+const dimensions = assets[diagram.image];
+if (!dimensions) throw new Error(`Missing rendered diagram ${diagram.image}. Run npm run diagrams:render.`);
+---
+<figure class="architecture-figure">
+  <figcaption>
+    <h3 id={`diagram-title-${index}`}>{diagram.title}</h3>
+    {diagram.description && <p>{diagram.description}</p>}
+  </figcaption>
+  <div class="diagram-image-scroll" role="region" aria-label={diagram.alt} tabindex="0">
+    <img
+      src={diagram.image}
+      alt={diagram.alt}
+      width={dimensions.width}
+      height={dimensions.height}
+      style={`max-width:${dimensions.width}px;${dimensions.width > 700 ? 'min-width:700px;' : ''}`}
+      loading="lazy"
+    />
+  </div>
+  <div class="diagram-actions"><a href={diagram.image} target="_blank" rel="noopener noreferrer">Open full diagram</a></div>
+  <details class="diagram-source"><summary>View Mermaid source</summary><pre><code>{diagram.mermaid}</code></pre></details>
+</figure>

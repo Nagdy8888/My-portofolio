@@ -1,5 +1,6 @@
 import { imageAnalysisAgentDiagrams } from "./imageAnalysisAgentDiagrams";
 import { reelMovieAgentDiagrams } from "./reelMovieAgentDiagrams";
+import { smartRagDiagrams } from "./smartRagDiagrams";
 
 export type ProjectCategory =
   | "Machine Learning"
@@ -45,7 +46,8 @@ export interface Project {
     title: string;
     alt: string;
     mermaid: string;
-    image?: string;
+    description?: string;
+    image: string;
     width?: number;
     height?: number;
   }[];
@@ -69,6 +71,33 @@ export function categoryToBadgeClass(category: ProjectCategory): string {
 }
 
 export const projects: Project[] = [
+  {
+    slug: "smart-rag",
+    title: "Smart RAG",
+    diagrams: smartRagDiagrams,
+    shortDescription: "A document intelligence workspace with hybrid search, inspectable PDF citations, and access-aware answers.",
+    fullDescription: "Designed and built a full-stack RAG platform for asking questions across company documents. The workspace combines semantic and keyword retrieval with LangGraph orchestration, streamed answers, original PDF page previews, and graph inspection. Company evidence is filtered by authorization, and unsupported questions can return an explicit refusal. Currently in final development and evaluation.",
+    tags: ["LangGraph", "FastAPI", "Next.js", "Supabase", "pgvector", "BM25"],
+    featured: true,
+    featuredRank: 0,
+    categories: ["AI Agent"],
+    keyResult: "Trace answers back to the original document page",
+    dateLabel: "2026 · Final development",
+    role: "Full-stack AI engineering",
+    scope: "Document ingestion, hybrid retrieval, agent orchestration, citations, and web console",
+    problem: "Finding a relevant passage is only part of document question answering. People also need to check the source, preserve table and figure context, and trust that the system respects document permissions.",
+    approach: "Combined pgvector semantic search, private ParadeDB BM25, and exact-term retrieval with reciprocal rank fusion. Built LangGraph query workflows behind FastAPI SSE and a Next.js console. Added PDF page citations, native table and figure rendering, LightRAG graph inspection, Supabase authorization, and isolated document processing with ClamAV scanning.",
+    results: "Delivered a working document intelligence console with inspectable sources and support for prose, tables, figures, and code. Evaluation traces distinguish retrieval, drafting, citation, and verification failures. Final acceptance and release evaluation remain in progress.",
+    tools: ["Python", "LangGraph", "FastAPI", "Next.js", "Supabase", "PostgreSQL", "pgvector", "ParadeDB BM25", "LightRAG", "Docker"],
+    image: "/images/projects/smart-rag/citation-page.jpg",
+    imageAlt: "Smart RAG displaying the original PDF page with highlighted evidence in its citation panel",
+    imageWidth: 1518,
+    imageHeight: 723,
+    screenshots: ["/images/projects/smart-rag/ask.jpg", "/images/projects/smart-rag/citation-page.jpg", "/images/projects/smart-rag/figure.jpg"],
+    screenshotAlts: ["A real Smart RAG conversation with a structured comparison table", "Original PDF page preview with highlighted source evidence", "An original source figure opened in Smart RAG's diagram viewer"],
+    year: 2026,
+    month: 10,
+  },
   {
     slug: "chemical-process-ml",
     title: "Chemical Process ML Model",
@@ -294,10 +323,10 @@ export const projects: Project[] = [
     approach: "Built a full-stack AI agent with a LangGraph DAG pipeline (12 nodes): preprocessor resizes and validates the image, a GPT-4o vision call produces a structured description, then 8 parallel taggers run on the text using a controlled taxonomy. A validator checks tags against the taxonomy, a confidence filter applies thresholds, and an aggregator produces the final TagRecord. Results are persisted in PostgreSQL (Supabase) with a flattened search index for fast multi-category AND queries. Frontend: single upload with real-time analysis, bulk upload with background processing and polling, search page with cascading filters.",
     results: "Structured tags across 8 categories with per-tag confidence scores and needs-review flagging. Parallel tagger execution via LangGraph Send API reduces latency. Search with AND logic using PostgreSQL array containment and cascading filter options. Bulk upload with background processing and live polling. Full Docker deployment with one command.",
     tools: ["LangGraph", "LangChain", "OpenAI GPT-4o", "Pydantic", "Python", "FastAPI", "Supabase", "PostgreSQL", "Next.js", "React", "TypeScript", "Tailwind CSS", "shadcn/ui", "Docker"],
-    image: "/images/projects/image-analysis-agent/01-home-before-upload.webp",
-    imageAlt: "Dark product image-tagging interface with single and bulk upload areas",
+    image: "/images/projects/image-analysis-agent/03-analysis-result.webp",
+    imageAlt: "Completed image analysis showing structured product tags and confidence scores",
     imageWidth: 1912,
-    imageHeight: 977,
+    imageHeight: 980,
     screenshots: [
       "/images/projects/image-analysis-agent/01-home-before-upload.webp",
       "/images/projects/image-analysis-agent/02-analyzing.webp",

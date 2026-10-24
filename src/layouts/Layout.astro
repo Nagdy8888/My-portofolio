@@ -10,10 +10,10 @@ interface Props {
 }
 
 const {
-  title = 'Mustafa Alnagdy | Data Science, AI & Process Systems',
-  description = 'Mustafa Alnagdy builds AI agents and machine-learning systems for industrial data, combining data science with process-engineering domain knowledge.',
-  image = '/images/projects/image-analysis-agent/03-analysis-result.webp',
-  imageAlt = 'Image Analysis Agent interface showing structured AI-generated product tags',
+  title = 'Mustafa Alnagdy | AI Engineering & Automation',
+  description = 'AI agents, document intelligence, and automation, built with a process-engineering perspective. Explore working software and engineering case studies by Mustafa Alnagdy.',
+  image = '/images/projects/smart-rag/citation-page.jpg',
+  imageAlt = 'Smart RAG displaying an original PDF citation page and highlighted evidence',
   type = 'website',
 } = Astro.props;
 
@@ -23,7 +23,7 @@ const personSchema = canonicalUrl
   ? {
       '@context': 'https://schema.org',
       '@type': 'Person',
-      name: 'Mustafa Abdel-Rahman Alnagdy',
+      name: 'Mustafa Alnagdy',
       url: canonicalUrl.origin,
       sameAs: [
         'https://www.linkedin.com/in/mustafa-alnagdy',
@@ -44,11 +44,12 @@ const personSchema = canonicalUrl
 <html lang="en" class="no-js">
   <head>
     <meta charset="utf-8" />
+    <link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Mustafa Alnagdy" />
-    <meta name="theme-color" content="#172554" />
+    <meta name="theme-color" content="#f8faf9" />
     <meta name="color-scheme" content="light dark" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:title" content={title} />
@@ -73,6 +74,7 @@ const personSchema = canonicalUrl
           var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var useDark = stored === 'dark' || (stored !== 'light' && prefersDark);
           document.documentElement.classList.toggle('dark', useDark);
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', useDark ? '#14262d' : '#f8faf9');
         } catch (e) {}
       })();
     </script>
@@ -88,6 +90,7 @@ const personSchema = canonicalUrl
 
         function updateThemeControl() {
           var isDark = document.documentElement.classList.contains('dark');
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#14262d' : '#f8faf9');
           var darkIcon = document.querySelector('.theme-icon-dark');
           var lightIcon = document.querySelector('.theme-icon-light');
           if (darkIcon) darkIcon.classList.toggle('hidden', isDark);

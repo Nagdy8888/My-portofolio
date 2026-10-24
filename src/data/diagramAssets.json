@@ -1,0 +1,37 @@
+{
+  "/images/projects/reel-movie-agent/system-overview.svg": {
+    "width": 2057,
+    "height": 1069,
+    "sourceHash": "3ee0151363df4d32a168b35a621f753d7ece9c3789c6e42df87d0cd12ee80618"
+  },
+  "/images/projects/reel-movie-agent/agent-workflow.svg": {
+    "width": 280,
+    "height": 388,
+    "sourceHash": "9ea5a80a35ff65d97479ed91f0117404d07038fddf3ec49140706f5a4d139205"
+  },
+  "/images/projects/reel-movie-agent/chat-lifecycle.svg": {
+    "width": 1581,
+    "height": 1303,
+    "sourceHash": "b06f2a831427f59d7084538b101dc18290c2a57b9e3b955224f1ae52d5eb0697"
+  },
+  "/images/projects/smart-rag/app-architecture.svg": {
+    "width": 972,
+    "height": 1030,
+    "sourceHash": "7c06908655fa616d20ed67539d3eec1a2cbb4425d65916d8904214394b4526d2"
+  },
+  "/images/projects/smart-rag/answer-workflow.svg": {
+    "width": 586,
+    "height": 1608,
+    "sourceHash": "7c74c5ae3c3dea16b5db7e92ce1c423c81c3a5e0497c22e12e234a3234977401"
+  },
+  "/images/projects/smart-rag/knowledge-graph.svg": {
+    "width": 1457,
+    "height": 1482,
+    "sourceHash": "30803c684cc2338b12e4700e2e25e2e97621deb789a74d8f70f1e4fd1209cc1f"
+  },
+  "/images/projects/image-analysis-agent/system-overview.svg": {
+    "width": 2245,
+    "height": 706,
+    "sourceHash": "81b3dcd1ce1d1dd2ca76e2a6d69a4b5cd1effa3087b2666eb42b2672b4f8013e"
+  }
+}

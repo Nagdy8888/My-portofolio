@@ -2,125 +2,32 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import { projectsByRecent, categoryToBadgeClass } from '../../data/projects';
-
-const categories = Array.from(new Set(projectsByRecent.flatMap((p) => p.categories))).sort();
+import { projectsByRecent } from '../../data/projects';
+const categories = Array.from(new Set(projectsByRecent.flatMap(p => p.categories))).sort();
 ---
-
-<Layout title="Projects | Mustafa Alnagdy" description="Portfolio projects - ML, data science, and process engineering.">
-  <Navbar />
-  <main id="main-content" class="py-16 md:py-20 bg-[var(--color-bg)]">
-    <div class="max-w-[1100px] mx-auto px-6">
-      <a href="/" class="text-sm text-[var(--color-primary)] hover:underline mb-6 inline-block">&larr; Back to Home</a>
-      <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-2">All Projects</h1>
-      <div class="section-underline mb-6"></div>
-      <p class="mb-8 max-w-2xl leading-relaxed text-[var(--color-text-light)]">
-        Case studies across industrial machine learning, AI agents, retrieval, and workflow automation.
-        Performance claims are included only when supporting evidence is available.
-      </p>
-
-      <div id="filter-tabs" class="mb-4 flex flex-wrap gap-2" aria-label="Filter projects by category">
-        <button type="button" class="project-filter-tab px-4 py-2 rounded-md text-sm font-medium bg-[var(--color-primary)] text-white dark:text-slate-950" data-filter="all" aria-pressed="true">
-          All
-        </button>
-        {categories.map((cat) => (
-          <button type="button" class="project-filter-tab px-4 py-2 rounded-md text-sm font-medium border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-colors" data-filter={cat} aria-pressed="false">
-            {cat}
-          </button>
-        ))}
-      </div>
-      <p id="project-filter-status" class="mb-8 text-sm text-[var(--color-text-light)]" aria-live="polite">
-        Showing all {projectsByRecent.length} projects
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projectsByRecent.map((project) => (
-          <article class="project-card overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] shadow-md" data-categories={project.categories.join(",")}>
-            <a href={`/projects/${project.slug}`} class="group flex h-full flex-col">
-              {project.image ? (
-                <div class="aspect-[16/9] overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-bg-alt)]">
-                  <img
-                    src={project.image}
-                    alt={project.imageAlt ?? `${project.title} project interface`}
-                    width={project.imageWidth ?? 1200}
-                    height={project.imageHeight ?? 675}
-                    loading="lazy"
-                    decoding="async"
-                    class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                </div>
-              ) : (
-                <div class="project-card-visual flex aspect-[16/9] items-end border-b border-[var(--color-border)] p-5" aria-hidden="true">
-                  <span class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-primary)]">
-                    {project.categories[0]} case study
-                  </span>
-                </div>
-              )}
-              <div class="flex flex-1 flex-col p-6">
-              <div class="flex flex-wrap gap-1.5 mb-3">
-                {project.categories.map((cat) => (
-                  <span class={`inline-block text-xs font-medium px-2.5 py-1 rounded-full ${categoryToBadgeClass(cat)}`}>{cat}</span>
-                ))}
-              </div>
-              {project.dateLabel && <p class="mb-2 text-xs text-[var(--color-text-light)]">{project.dateLabel}</p>}
-              <h3 class="font-semibold text-lg text-[var(--color-text)] mb-2">{project.title}</h3>
-              <p class="text-sm text-[var(--color-text-light)] mb-2">{project.shortDescription}</p>
-              {project.keyResult && <p class="text-sm font-semibold text-[var(--color-primary)] mb-4">{project.keyResult}</p>}
-              <div class="mb-5 flex flex-wrap gap-2">
-                {project.tags.slice(0, 4).map((tag) => (
-                  <span class="tag-pill text-xs font-medium px-3 py-1 rounded-full">{tag}</span>
-                ))}
-                {project.tags.length > 4 && (
-                  <span class="rounded-full border border-[var(--color-border)] px-3 py-1 text-xs text-[var(--color-text-light)]">
-                    +{project.tags.length - 4}
-                  </span>
-                )}
-              </div>
-              <span class="mt-auto text-sm font-semibold text-[var(--color-primary)]">
-                Read case study <span aria-hidden="true">→</span>
-              </span>
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
-    </div>
-  </main>
-  <Footer />
-</Layout>
-
+<Layout title="Selected Work | Mustafa Alnagdy" description="Explore AI agents, document intelligence, workflow automation, and industrial machine-learning projects by Mustafa Alnagdy."><Navbar /><main id="main-content" class="archive-main wrap"><a href="/" class="back-link"> Back to home</a><div class="archive-heading"><h1>Ideas, built out.</h1><p>AI agents, useful automations, and machine learning grounded in real systems. Explore the work and the thinking behind it.</p></div><div class="archive-filters" role="group" aria-label="Filter projects by category"><button class="filter-button" data-filter="all" aria-pressed="true">All work</button>{categories.map(category => <button class="filter-button" data-filter={category} aria-pressed="false">{category}</button>)}</div><p id="project-filter-status" class="filter-status" aria-live="polite">Showing all {projectsByRecent.length} projects</p><div class="archive-grid">{projectsByRecent.map(project => <article class:list={["archive-project", { "archive-project-text": !project.image }]} data-categories={JSON.stringify(project.categories)}>{project.image && <a class="archive-visual" href={`/projects/${project.slug}`} aria-label={`View ${project.title} case study`}><img src={project.image} alt={project.imageAlt ?? project.title} width={project.imageWidth ?? 1200} height={project.imageHeight ?? 675} loading="lazy" /></a>}<div class="project-meta"><span>{project.categories.join(' / ')}</span><span>{project.dateLabel ?? project.year}</span></div><h2><a href={`/projects/${project.slug}`}>{project.title}</a></h2><p>{project.shortDescription}</p><div class="inline-tags">{project.tags.slice(0,4).map(tag => <span>{tag}</span>)}</div></article>)}</div><div class="archive-close"><h2>Have something in mind?</h2><a class="text-link" href="/#contact">Let’s talk about it </a></div></main><Footer /></Layout>
 <script>
-  const tabs = document.querySelectorAll('.project-filter-tab');
-  const cards = document.querySelectorAll('.project-card');
-  const status = document.getElementById('project-filter-status');
-
-  function setActiveTab(active: Element) {
-    tabs.forEach((tab) => {
-      tab.classList.remove('bg-[var(--color-primary)]', 'text-white', 'dark:text-slate-950');
-      tab.classList.add('border-2', 'border-[var(--color-primary)]', 'text-[var(--color-primary)]');
-      tab.setAttribute('aria-pressed', 'false');
-    });
-    active.classList.remove('border-2', 'border-[var(--color-primary)]', 'text-[var(--color-primary)]');
-    active.classList.add('bg-[var(--color-primary)]', 'text-white', 'dark:text-slate-950');
-    active.setAttribute('aria-pressed', 'true');
-  }
-
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const filter = tab.getAttribute('data-filter') ?? 'all';
-      setActiveTab(tab);
-      let visibleCount = 0;
-      cards.forEach((card) => {
-        const categoriesStr = card.getAttribute('data-categories') ?? '';
-        const cardCats = categoriesStr ? categoriesStr.split(',') : [];
-        const show = filter === 'all' || cardCats.includes(filter);
-        (card as HTMLElement).classList.toggle('hidden', !show);
-        if (show) visibleCount += 1;
-      });
-      if (status) {
-        const label = filter === 'all' ? 'all' : filter;
-        status.textContent = `Showing ${visibleCount} ${label} ${visibleCount === 1 ? 'project' : 'projects'}`;
-      }
-    });
+const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+const cards = [...document.querySelectorAll<HTMLElement>('.archive-project')];
+const status = document.getElementById('project-filter-status');
+function applyFilter(requested: string, updateUrl = false) {
+  const filter = buttons.some(button => button.dataset.filter === requested) ? requested : 'all';
+  let visible = 0;
+  buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === filter)));
+  cards.forEach(card => {
+    const show = filter === 'all' || JSON.parse(card.dataset.categories ?? '[]').includes(filter);
+    card.hidden = !show;
+    if (show) visible++;
   });
+  if (status) status.textContent = filter === 'all' ? `Showing all ${visible} projects` : `Showing ${visible} ${filter} ${visible === 1 ? 'project' : 'projects'}`;
+  if (updateUrl) {
+    const url = new URL(window.location.href);
+    if (filter === 'all') url.searchParams.delete('category');
+    else url.searchParams.set('category', filter);
+    window.history.pushState(null, '', url);
+  }
+}
+buttons.forEach(button => button.addEventListener('click', () => applyFilter(button.dataset.filter ?? 'all', true)));
+window.addEventListener('popstate', () => applyFilter(new URLSearchParams(location.search).get('category') ?? 'all'));
+applyFilter(new URLSearchParams(location.search).get('category') ?? 'all');
 </script>

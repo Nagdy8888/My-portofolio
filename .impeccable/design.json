@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T10:41:23Z",
+  "title": "Design System: Mustafa Alnagdy Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Forest"
+      },
+      "mint": {
+        "role": "primary",
+        "displayName": "Mint"
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Navy Ink"
+      },
+      "bg": {
+        "role": "neutral",
+        "displayName": "Off-white"
+      },
+      "bg-alt": {
+        "role": "neutral",
+        "displayName": "Pale Sage"
+      },
+      "text-light": {
+        "role": "neutral",
+        "displayName": "Slate"
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Sage Border"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White Surface"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Hero Display",
+        "purpose": "Homepage introduction; contracts to 60px at the intermediate breakpoint and clamp(48px,10vw,68px) on mobile."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Homepage sections; 35px on mobile."
+      },
+      "title": {
+        "displayName": "Project Title",
+        "purpose": "Supporting project names."
+      },
+      "body": {
+        "displayName": "Summary",
+        "purpose": "Project summaries; case-study prose uses 15px with 1.95 line-height and 72ch maximum measure."
+      },
+      "label": {
+        "displayName": "Metadata",
+        "purpose": "Readable 12px project metadata, tags, case facts, timeline labels, and footer."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hero-screenshot",
+        "value": "0 12px 30px #17313e20",
+        "purpose": "Image inside the hero artifact."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-background",
+        "value": "background .18s",
+        "purpose": "Filled action hover."
+      },
+      {
+        "name": "artifact-straighten",
+        "value": "transform .3s",
+        "purpose": "Hero screenshot remains level without hover movement."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media(prefers-reduced-motion:reduce)",
+        "purpose": "Disable animation and transitions; remove artifact rotation and use automatic scroll behavior."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1450px",
+        "purpose": "Minimum width: use 40px hero composition padding and preserve screenshot proportions."
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1100px",
+        "purpose": "Maximum width: reduce gutters, hero type, and column gaps."
+      },
+      {
+        "name": "case-compact",
+        "value": "1000px",
+        "purpose": "Maximum width: reduce case-study gaps."
+      },
+      {
+        "name": "mobile",
+        "value": "767px",
+        "purpose": "Maximum width: single-column layouts and mobile header."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Compact filled action with an accent hover and visible keyboard focus.",
+      "html": "<button class=\"ds-button\">Explore my work</button>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:space-between;gap:35px;padding:15px 22px;border:0;border-radius:5px;font-family:var(--font-family-sans,'Manrope','Segoe UI',sans-serif);font-size:13px;font-weight:650;background:var(--color-text,#17313e);color:var(--color-bg,#f8faf9);cursor:pointer;transition:background .18s}.ds-button:hover{background:var(--color-primary,#216556)}.ds-button:focus-visible{outline:3px solid var(--color-primary,#216556);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}"
+    },
+    {
+      "name": "Category Filter",
+      "kind": "button",
+      "refersTo": "filter",
+      "description": "Archive category control; selected state is represented by aria-pressed.",
+      "html": "<button class=\"ds-filter\" aria-pressed=\"true\">All work</button>",
+      "css": ".ds-filter{min-height:44px;padding:10px 16px;border:1px solid var(--color-border,#d6dfda);border-radius:5px;font-family:var(--font-family-sans,'Manrope','Segoe UI',sans-serif);font-size:11px;background:transparent;color:var(--color-text,#17313e);cursor:pointer;transition:background .2s}.ds-filter[aria-pressed=true]{background:var(--color-text,#17313e);color:var(--color-bg,#f8faf9);border-color:var(--color-text,#17313e)}.ds-filter:hover{border-color:var(--color-primary,#216556)}.ds-filter:focus-visible{outline:3px solid var(--color-primary,#216556);outline-offset:5px}@media(max-width:767px){.ds-filter{padding:10px 12px;font-size:10px}}@media(prefers-reduced-motion:reduce){.ds-filter{transition:none}}"
+    },
+    {
+      "name": "Metadata Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Static project metadata. Case headers show up to six tags, with the complete stack later in Built with.",
+      "html": "<span class=\"ds-tag\">LangGraph</span>",
+      "css": ".ds-tag{display:inline-block;font-family:var(--font-family-sans,'Manrope','Segoe UI',sans-serif);font-size:12px;padding:5px 9px;border:1px solid var(--color-border,#d6dfda);border-radius:4px;color:var(--color-text,#17313e)}"
+    },
+    {
+      "name": "Theme Control",
+      "kind": "button",
+      "refersTo": "theme-control",
+      "description": "Circular header control with a 44px touch target at every viewport. Persists light or dark preference.",
+      "html": "<button class=\"ds-theme\" aria-label=\"Switch color theme\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M12 4a8 8 0 0 1 0 16Z\" fill=\"currentColor\"/></svg></button>",
+      "css": ".ds-theme{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--color-border,#d6dfda);border-radius:50%;background:transparent;color:var(--color-text,#17313e);cursor:pointer}.ds-theme:focus-visible{outline:3px solid var(--color-primary,#216556);outline-offset:5px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineering Showcase",
+    "overview": "A calm exhibition of working software for prospective engineering clients and employers. The confirmed off-white, navy, and mint direction combines geometric typography, measured whitespace, real product imagery, and quiet functional navigation. The implementation is code-first.\n\nScreenshots provide the visual evidence; the surrounding interface gives them a clear frame. Large statements introduce the work while compact metadata and restrained borders support close inspection.",
+    "keyCharacteristics": [
+      "Measured off-white space and strong navy hierarchy.",
+      "Direct product screenshots, a mint screenshot caption, and mint contact surfaces.",
+      "Compact labels, understated controls, and accessible inspection."
+    ],
+    "rules": [
+      {
+        "name": "Mint Surface Focus",
+        "body": "Use the navy --ink focus outline on mint contact and case CTA sections, including dark mode.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do use the shared semantic palette so light and dark themes remain coherent.",
+      "Do let real software imagery carry the visual evidence.",
+      "Do preserve measured section spacing and readable supporting metadata.",
+      "Do keep keyboard focus visible and honor reduced motion.",
+      "Do lead ImageAnalysis with the completed result and use simple category-and-title archive panels when no screenshot exists.",
+      "Do preserve original-image links as the gallery fallback and offer fitted or original-size inspection in the keyboard-scrollable viewer.",
+      "Do limit case-header tags to six and show the full stack later."
+    ],
+    "donts": [
+      "Don't turn every article into a shadowed card; the current hierarchy relies on whitespace, rules, and tonal sections.",
+      "Don't retain the hero rotation on mobile or under reduced motion.",
+      "Don't substitute decorative mockups for the real screenshots that define this showcase."
+    ]
+  }
+}
